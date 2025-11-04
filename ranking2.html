@@ -17,11 +17,14 @@
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-    #orgchart { margin-top: 40px; }
-    .orgchart .node { background-color: #28a745; color: white; }
+    .bracket-container { margin-top: 40px; text-align: center; }
+    .orgchart { background: transparent; }
+    .orgchart .node { background-color: #e3f2fd; color: #0d6efd; border: 1px solid #0d6efd; }
+    .orgchart .node .title { background-color: #0d6efd; color: white; }
     .orgchart .node .content { background-color: #e3f2fd; color: #0d6efd; }
-    .orgchart .edge { border-color: #28a745; }
-    .loading { text-align: center; color: #888; font-style: italic; }
+    .orgchart .edge { border-color: #0d6efd; }
+    .trophy { font-size: 3em; color: gold; margin: 20px 0; }
+    .sponsor { margin-top: 30px; text-align: center; color: #888; }
   </style>
 </head>
 <body>
@@ -57,7 +60,12 @@
     <div class="chart-container"><canvas id="chartB"></canvas></div>
 
     <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
-    <div id="orgchart"></div>
+    <div class="bracket-container">
+      <h4 class="text-center mb-3">TỨ KẾT - BÁN KẾT - CHUNG KẾT</h4>
+      <div class="text-center trophy"><i class="fas fa-trophy"></i></div>
+      <div id="orgchart"></div>
+      <p class="sponsor mt-4">Nhà tài trợ: [Tên nhà tài trợ] | Ngày thi đấu: 15/11/2025</p>
+    </div>
   </div>
 
   <script>
@@ -113,7 +121,7 @@
       });
 
       drawChart(chartId, teams, points, goalDiff);
-      return filteredData; // Trả về dữ liệu đã sắp xếp để dùng cho sơ đồ
+      return filteredData;
     }
 
     function drawChart(chartId, teams, points, goalDiff) {
@@ -146,34 +154,37 @@
     }
 
     function drawOrgChart(dataA, dataB) {
-      const nodes = {
-        name: 'Vô Địch',
-        children: [
-          { name: 'Thắng Bán Kết 1', children: [
-            { name: dataA[0].team + ' (Nhất A)' },
-            { name: dataB[3].team + ' (Thứ 4 B)' }
+      const datasource = {
+        'id': 'chung-ket',
+        'name': 'CHUNG KẾT',
+        'title': '11.11.2018',
+        'children': [
+          { 'id': 'ban-ket-1', 'name': 'BÁN KẾT 1', 'title': '28.10.2018', 'children': [
+            { 'id': 'nhat-a', 'name': dataA[0].team + ' (NHẤT A)' },
+            { 'id': 'thu-4-b', 'name': dataB[3].team + ' (THỨ 4 B)' }
           ]},
-          { name: 'Thắng Bán Kết 2', children: [
-            { name: dataA[2].team + ' (Thứ 3 A)' },
-            { name: dataB[1].team + ' (Thứ 2 B)' }
+          { 'id': 'ban-ket-2', 'name': 'BÁN KẾT 2', 'title': '04.11.2018', 'children': [
+            { 'id': 'thu-3-a', 'name': dataA[2].team + ' (THỨ 3 A)' },
+            { 'id': 'thu-2-b', 'name': dataB[1].team + ' (THỨ 2 B)' }
           ]},
-          { name: 'Thắng Bán Kết 3', children: [
-            { name: dataB[0].team + ' (Nhất B)' },
-            { name: dataA[3].team + ' (Thứ 4 A)' }
+          { 'id': 'ban-ket-3', 'name': 'BÁN KẾT 3', 'title': '04.11.2018', 'children': [
+            { 'id': 'nhat-b', 'name': dataB[0].team + ' (NHẤT B)' },
+            { 'id': 'thu-4-a', 'name': dataA[3].team + ' (THỨ 4 A)' }
           ]},
-          { name: 'Thắng Bán Kết 4', children: [
-            { name: dataB[2].team + ' (Thứ 3 B)' },
-            { name: dataA[1].team + ' (Thứ 2 A)' }
+          { 'id': 'ban-ket-4', 'name': 'BÁN KẾT 4', 'title': '28.10.2018', 'children': [
+            { 'id': 'thu-3-b', 'name': dataB[2].team + ' (THỨ 3 B)' },
+            { 'id': 'thu-2-a', 'name': dataA[1].team + ' (THỨ 2 A)' }
           ]}
         ]
       };
 
-      // Vẽ sơ đồ
       $('#orgchart').orgchart({
-        data: nodes,
+        data: datasource,
+        direction: 'l2r',  // Hướng từ trái sang phải để giống bracket
         nodeTitle: 'name',
         nodeContent: 'title',
-        direction: 't2b'
+        pan: true,
+        zoom: true
       });
     }
 
