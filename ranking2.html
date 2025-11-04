@@ -6,48 +6,28 @@
   <title>Xếp Hạng Giải Tennis Hưng Phú 2025</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/orgchart@4.0.0/dist/css/jquery.orgchart.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/orgchart@4.0.0/dist/js/jquery.orgchart.min.js"></script>
   <style>
-    body { padding: 20px; background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+    body { padding: 20px; background: #f8f9fa; }
     .table thead { background-color: #28a745; color: white; }
     .chart-container { height: 300px; margin-top: 20px; }
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-
-    /* SƠ ĐỒ ĐẤU LOẠI */
-    .bracket { margin-top: 50px; }
-    .match { display: flex; align-items: center; margin: 15px 0; position: relative; }
-    .team { 
-      width: 160px; 
-      padding: 10px; 
-      text-align: center; 
-      border: 1px solid #ccc; 
-      border-radius: 8px; 
-      background: #fff; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      font-weight: 500;
-    }
-    .team.green { background: #d4edda; border-color: #28a745; }
-    .team.blue { background: #d1ecf1; border-color: #17a2b8; }
-    .team.winner { background: #28a745; color: white; font-weight: bold; }
-    .team.third { background: #ffc107; color: black; font-weight: bold; }
-    .arrow { 
-      width: 50px; 
-      text-align: center; 
-      font-size: 1.5rem; 
-      color: #28a745; 
-      font-weight: bold;
-    }
-    .spacer { height: 60px; }
-    .cup-section { margin-top: 60px; border-top: 2px dashed #ddd; padding-top: 30px; }
+    .bracket-container { margin-top: 40px; }
+    .orgchart { background: transparent; }
+    .orgchart .node .title { background-color: #28a745; color: white; }
+    .orgchart .node .content { background-color: #e9ecef; color: black; }
+    .orgchart .edge { border-color: #28a745; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1 class="text-center mb-4">Xếp Hạng Giải Tennis Hưng Phú 2025</h1>
 
-    <!-- BẢNG A -->
     <h3>Bảng A</h3>
     <table class="table table-striped">
       <thead>
@@ -62,7 +42,6 @@
     </table>
     <div class="chart-container"><canvas id="chartA"></canvas></div>
 
-    <!-- BẢNG B -->
     <h3>Bảng B</h3>
     <table class="table table-striped">
       <thead>
@@ -77,104 +56,8 @@
     </table>
     <div class="chart-container"><canvas id="chartB"></canvas></div>
 
-    <!-- SƠ ĐỒ ĐẤU LOẠI -->
-    <h3 class="mt-5">Sơ Đồ Đấu Loại Trực Tiếp</h3>
-    <div class="bracket">
-
-      <!-- BÁN KẾT 1 -->
-      <div class="match">
-        <div class="team green" id="nhatA">(1) Nhất A</div>
-        <div class="arrow">→</div>
-        <div class="team" id="banKet1">(9) Bán Kết 1</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="thangBK1">Thắng Bán Kết 1</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="voDich">Vô Địch</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 2 -->
-      <div class="match">
-        <div class="team blue" id="thu4B">(2) Thứ 4 B</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 3 -->
-      <div class="match">
-        <div class="team green" id="thu3A">(3) Thứ 3 A</div>
-        <div class="arrow">→</div>
-        <div class="team" id="banKet2">(10) Bán Kết 2</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="thangBK2">Thắng Bán Kết 2</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 4 -->
-      <div class="match">
-        <div class="team blue" id="thu2B">(4) Thứ 2 B</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 5 -->
-      <div class="match">
-        <div class="team blue" id="nhatB">(5) Nhất B</div>
-        <div class="arrow">→</div>
-        <div class="team" id="banKet3">(11) Bán Kết 3</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="thangBK3">Thắng Bán Kết 3</div>
-        <div class="arrow">→</div>
-        <div class="team third" id="giaBa">Giải Ba</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 6 -->
-      <div class="match">
-        <div class="team green" id="thu4A">(6) Thứ 4 A</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 7 -->
-      <div class="match">
-        <div class="team blue" id="thu3B">(7) Thứ 3 B</div>
-        <div class="arrow">→</div>
-        <div class="team" id="banKet4">(12) Bán Kết 4</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="thangBK4">Thắng Bán Kết 4</div>
-      </div>
-      <div class="spacer"></div>
-
-      <!-- BÁN KẾT 8 -->
-      <div class="match">
-        <div class="team green" id="thu2A">(8) Thứ 2 A</div>
-      </div>
-
-    </div>
-
-    <!-- CÚP VUA VÒNG LOẠI -->
-    <div class="cup-section">
-      <h3>Cúp Vua Vòng Loại</h3>
-      <div class="match">
-        <div class="team" id="vongLoai1">Vòng Loại 1 - 5A</div>
-        <div class="arrow">→</div>
-        <div class="team" id="ckVongLoai1">Chung kết vòng loại 1</div>
-        <div class="arrow">→</div>
-        <div class="team winner" id="vuaVongLoai">Vua Vòng Loại</div>
-      </div>
-      <div class="spacer"></div>
-      <div class="match">
-        <div class="team" id="vongLoai2">Vòng Loại 2 - 6B</div>
-      </div>
-      <div class="spacer"></div>
-      <div class="match">
-        <div class="team" id="vongLoai3">Vòng Loại 3 - 5B</div>
-        <div class="arrow">→</div>
-        <div class="team" id="ckVongLoai2">Chung kết vòng loại 2</div>
-      </div>
-      <div class="spacer"></div>
-      <div class="match">
-        <div class="team" id="vongLoai4">Vòng Loại 4 - 6A</div>
-      </div>
-    </div>
+    <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
+    <div id="orgchart"></div>
   </div>
 
   <script>
@@ -189,59 +72,125 @@
       return { headers, data };
     }
 
-    async function updateAll() {
+    async function updateTable(tableId, chartId, table) {
       const { headers, data } = await fetchData();
-      const tableA = data.filter(row => row[0] === 'A' && row[1] !== "").map(row => ({
-        team: row[1], rank: parseInt(row[9]) || 0
-      }));
-      const tableB = data.filter(row => row[0] === 'B' && row[1] !== "").map(row => ({
-        team: row[1], rank: parseInt(row[9]) || 0
+      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
+        team: row[1],
+        matches: parseInt(row[2]) || 0,
+        wins: parseInt(row[3]) || 0,
+        losses: parseInt(row[4]) || 0,
+        points: parseInt(row[5]) || 0,
+        gamesWon: parseInt(row[6]) || 0,
+        gamesLost: parseInt(row[7]) || 0,
+        goalDiff: parseInt(row[8]) || 0,
+        rank: parseInt(row[9]) || 0
       }));
 
-      // Sắp xếp theo rank
-      tableA.sort((a, b) => a.rank - b.rank);
-      tableB.sort((a, b) => a.rank - b.rank);
-
-      // Cập nhật bảng A
-      const tbodyA = document.getElementById('tableA');
-      tbodyA.innerHTML = '';
-      tableA.forEach((row, i) => {
-        let icon = '';
-        if (i === 0) icon = '<i class="fas fa-medal icon-gold"></i>';
-        else if (i === 1) icon = '<i class="fas fa-medal icon-silver"></i>';
-        else if (i === 2) icon = '<i class="fas fa-medal icon-bronze"></i>';
-        tbodyA.innerHTML += `<tr><td>${icon} ${row.rank}</td><td>${row.team}</td><td>—</td><td>—</td></tr>`;
+      // Sắp xếp theo rank tăng dần (1 đến 6)
+      filteredData.sort(function(a, b) {
+        return a.rank - b.rank;
       });
 
-      // Cập nhật bảng B
-      const tbodyB = document.getElementById('tableB');
-      tbodyB.innerHTML = '';
-      tableB.forEach((row, i) => {
-        let icon = '';
-        if (i === 0) icon = '<i class="fas fa-medal icon-gold"></i>';
-        else if (i === 1) icon = '<i class="fas fa-medal icon-silver"></i>';
-        else if (i === 2) icon = '<i class="fas fa-medal icon-bronze"></i>';
-        tbodyB.innerHTML += `<tr><td>${icon} ${row.rank}</td><td>${row.team}</td><td>—</td><td>—</td></tr>`;
+      const tableBody = document.getElementById(tableId);
+      tableBody.innerHTML = '';
+      let points = [], teams = [], goalDiff = [];
+      filteredData.forEach(row => {
+        let iconClass = '';
+        if (row.rank === 1) iconClass = 'icon-gold';
+        else if (row.rank === 2) iconClass = 'icon-silver';
+        else if (row.rank === 3) iconClass = 'icon-bronze';
+        tableBody.innerHTML += `
+          <tr>
+            <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
+            <td>${row.team}</td>
+            <td>${row.points}</td>
+            <td>${row.goalDiff}</td>
+          </tr>
+        `;
+        teams.push(row.team);
+        points.push(row.points);
+        goalDiff.push(row.goalDiff);
       });
 
-      // Cập nhật sơ đồ
-      document.getElementById('nhatA').innerText = tableA[0].team;
-      document.getElementById('thu4B').innerText = tableB[3].team;
-      document.getElementById('thu3A').innerText = tableA[2].team;
-      document.getElementById('thu2B').innerText = tableB[1].team;
-      document.getElementById('nhatB').innerText = tableB[0].team;
-      document.getElementById('thu4A').innerText = tableA[3].team;
-      document.getElementById('thu3B').innerText = tableB[2].team;
-      document.getElementById('thu2A').innerText = tableA[1].team;
-
-      // Cúp Vua Vòng Loại
-      document.getElementById('vongLoai1').innerText = `Vòng Loại 1 - ${tableA[4].team}`;
-      document.getElementById('vongLoai2').innerText = `Vòng Loại 2 - ${tableB[5].team}`;
-      document.getElementById('vongLoai3').innerText = `Vòng Loại 3 - ${tableB[4].team}`;
-      document.getElementById('vongLoai4').innerText = `Vòng Loại 4 - ${tableA[5].team}`;
+      drawChart(chartId, teams, points, goalDiff);
+      return filteredData; // Trả về để dùng cho OrgChart
     }
 
-    updateAll();
+    function drawChart(chartId, teams, points, goalDiff) {
+      const ctx = document.getElementById(chartId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: teams,
+          datasets: [{
+            label: 'Điểm',
+            data: points,
+            backgroundColor: '#28a745'
+          }, {
+            label: 'Hiệu số',
+            data: goalDiff,
+            backgroundColor: '#ffc107'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    async function loadData() {
+      const dataA = await updateTable('tableA', 'chartA', 'A');
+      const dataB = await updateTable('tableB', 'chartB', 'B');
+      drawOrgChart(dataA, dataB);
+    }
+
+    function drawOrgChart(a, b) {
+      const nodes = [
+        { id: '1', name: a[0].team + '<br>(1) Nhất A' },
+        { id: '2', name: b[3].team + '<br>(2) Thứ 4 B' },
+        { id: '3', name: a[2].team + '<br>(3) Thứ 3 A' },
+        { id: '4', name: b[1].team + '<br>(4) Thứ 2 B' },
+        { id: '5', name: b[0].team + '<br>(5) Nhất B' },
+        { id: '6', name: a[3].team + '<br>(6) Thứ 4 A' },
+        { id: '7', name: b[2].team + '<br>(7) Thứ 3 B' },
+        { id: '8', name: a[1].team + '<br>(8) Thứ 2 A' },
+
+        { id: '9', name: '(9) Bán Kết 1' },
+        { id: '10', name: '(10) Bán Kết 2' },
+        { id: '11', name: '(11) Bán Kết 3' },
+        { id: '12', name: '(12) Bán Kết 4' },
+
+        { id: 'thangBK1', name: 'Thắng Bán Kết 1' },
+        { id: 'thangBK2', name: 'Thắng Bán Kết 2' },
+        { id: 'thangBK3', name: 'Thắng Bán Kết 3' },
+        { id: 'thangBK4', name: 'Thắng Bán Kết 4' },
+
+        { id: 'voDich', name: 'Vô Địch' },
+        { id: 'giaBa', name: 'Giải Ba' },
+
+        { id: 'vongLoai1', name: 'Vòng Loại 1 SA' },
+        { id: 'chungKetVongLoai1', name: 'Chung kết vòng loại 1' },
+        { id: 'vongLoai2', name: 'Vòng Loại 2 6B' },
+        { id: 'chungKetVongLoai2', name: 'Chung kết vòng loại 2' },
+        { id: 'vongLoai3', name: 'Vòng Loại 3 5B' },
+        { id: 'vongLoai4', name: 'Vòng Loại 4 6A' },
+        { id: 'vuaVongLoai', name: 'Vua Vong Loai' }
+      ];
+
+      $('#orgchart').orgchart({
+        data: nodes,
+        direction: 'l2r',
+        nodeTitle: 'name',
+        nodeContent: 'title',
+        createNode: function($node, data) {
+          if (data.name.includes('Vô Địch')) $node.addClass('winner-box');
+          if (data.name.includes('Giải Ba')) $node.addClass('third-place-box');
+        }
+      });
+    }
+
+    loadData();
   </script>
 </body>
 </html>
