@@ -14,6 +14,12 @@
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
+    .bracket-container { margin-top: 40px; }
+    .bracket { display: flex; justify-content: space-around; align-items: center; margin-bottom: 10px; }
+    .team-box { width: 150px; text-align: center; padding: 5px; border: 1px solid #ddd; border-radius: 5px; background: #fff; }
+    .arrow { font-size: 1.2em; margin: 0 10px; }
+    .winner-box { background: #28a745; color: white; }
+    .third-place-box { background: #ffc107; color: black; }
   </style>
 </head>
 <body>
@@ -47,10 +53,47 @@
       <tbody id="tableB"></tbody>
     </table>
     <div class="chart-container"><canvas id="chartB"></canvas></div>
+
+    <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
+    <div class="bracket-container">
+      <!-- Cột 1: Các đội ban đầu -->
+      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px;">
+        <div class="team-box" id="nhatA">(1) Nhất A</div>
+        <div class="team-box" id="thu4B">(2) Thứ 4 B</div>
+        <div class="team-box" id="thu3A">(3) Thứ 3 A</div>
+        <div class="team-box" id="thu2B">(4) Thứ 2 B</div>
+        <div class="team-box" id="nhatB">(5) Nhất B</div>
+        <div class="team-box" id="thu4A">(6) Thứ 4 A</div>
+        <div class="team-box" id="thu3B">(7) Thứ 3 B</div>
+        <div class="team-box" id="thu2A">(8) Thứ 2 A</div>
+      </div>
+
+      <!-- Cột 2: Bán kết -->
+      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
+        <div class="team-box" id="banKet1">(9) Bán Kết 1</div>
+        <div class="team-box" id="banKet2">(10) Bán Kết 2</div>
+        <div class="team-box" id="banKet3">(11) Bán Kết 3</div>
+        <div class="team-box" id="banKet4">(12) Bán Kết 4</div>
+      </div>
+
+      <!-- Cột 3: Thắng bán kết -->
+      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
+        <div class="team-box winner-box" id="thangBK1">Thắng Bán Kết 1</div>
+        <div class="team-box winner-box" id="thangBK2">Thắng Bán Kết 2</div>
+        <div class="team-box winner-box" id="thangBK3">Thắng Bán Kết 3</div>
+        <div class="team-box winner-box" id="thangBK4">Thắng Bán Kết 4</div>
+      </div>
+
+      <!-- Cột 4: Vô Địch và Giải Ba -->
+      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
+        <div class="team-box winner-box" id="voDich">Vô Địch</div>
+        <div class="team-box third-place-box" id="giaBa">Giải Ba</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL đã cập nhật theo yêu cầu của anh/chị
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL đã cung cấp
 
     async function fetchData() {
       const response = await fetch(sheetUrl);
@@ -102,6 +145,21 @@
       });
 
       drawChart(chartId, teams, points, goalDiff);
+      updateBracket(filteredData, table);  // Cập nhật sơ đồ
+    }
+
+    function updateBracket(data, table) {
+      if (table === 'A') {
+        document.getElementById('nhatA').innerText = data[0].team; // Hạng 1 Bảng A
+        document.getElementById('thu3A').innerText = data[2].team; // Hạng 3 Bảng A
+        document.getElementById('thu4A').innerText = data[3].team; // Hạng 4 Bảng A
+        document.getElementById('thu2A').innerText = data[1].team; // Hạng 2 Bảng A
+      } else if (table === 'B') {
+        document.getElementById('thu4B').innerText = data[3].team; // Hạng 4 Bảng B
+        document.getElementById('thu2B').innerText = data[1].team; // Hạng 2 Bảng B
+        document.getElementById('nhatB').innerText = data[0].team; // Hạng 1 Bảng B
+        document.getElementById('thu3B').innerText = data[2].team; // Hạng 3 Bảng B
+      }
     }
 
     function drawChart(chartId, teams, points, goalDiff) {
