@@ -14,12 +14,13 @@
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-    .bracket-container { margin-top: 40px; }
-    .bracket { display: flex; justify-content: space-around; align-items: center; margin-bottom: 10px; }
-    .team-box { width: 150px; text-align: center; padding: 5px; border: 1px solid #ddd; border-radius: 5px; background: #fff; }
-    .arrow { font-size: 1.2em; margin: 0 10px; }
-    .winner-box { background: #28a745; color: white; }
-    .third-place-box { background: #ffc107; color: black; }
+    .bracket-container { margin-top: 40px; position: relative; }
+    .bracket-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .team-box { width: 150px; text-align: center; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .arrow { font-size: 1.5em; margin: 0 20px; color: #28a745; }
+    .winner-box { background: #28a745; color: white; font-weight: bold; }
+    .third-place-box { background: #ffc107; color: black; font-weight: bold; }
+    .cup-container { margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; }
   </style>
 </head>
 <body>
@@ -56,38 +57,71 @@
 
     <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
     <div class="bracket-container">
-      <!-- Cột 1: Các đội ban đầu -->
-      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px;">
+      <div class="bracket-row">
         <div class="team-box" id="nhatA">(1) Nhất A</div>
-        <div class="team-box" id="thu4B">(2) Thứ 4 B</div>
-        <div class="team-box" id="thu3A">(3) Thứ 3 A</div>
-        <div class="team-box" id="thu2B">(4) Thứ 2 B</div>
-        <div class="team-box" id="nhatB">(5) Nhất B</div>
-        <div class="team-box" id="thu4A">(6) Thứ 4 A</div>
-        <div class="team-box" id="thu3B">(7) Thứ 3 B</div>
-        <div class="team-box" id="thu2A">(8) Thứ 2 A</div>
-      </div>
-
-      <!-- Cột 2: Bán kết -->
-      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
+        <i class="fas fa-arrow-right arrow"></i>
         <div class="team-box" id="banKet1">(9) Bán Kết 1</div>
-        <div class="team-box" id="banKet2">(10) Bán Kết 2</div>
-        <div class="team-box" id="banKet3">(11) Bán Kết 3</div>
-        <div class="team-box" id="banKet4">(12) Bán Kết 4</div>
-      </div>
-
-      <!-- Cột 3: Thắng bán kết -->
-      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
+        <i class="fas fa-arrow-right arrow"></i>
         <div class="team-box winner-box" id="thangBK1">Thắng Bán Kết 1</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box winner-box" id="voDich">Vô Địch</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu4B">(2) Thứ 4 B</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu3A">(3) Thứ 3 A</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box" id="banKet2">(10) Bán Kết 2</div>
+        <i class="fas fa-arrow-right arrow"></i>
         <div class="team-box winner-box" id="thangBK2">Thắng Bán Kết 2</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu2B">(4) Thứ 2 B</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="nhatB">(5) Nhất B</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box" id="banKet3">(11) Bán Kết 3</div>
+        <i class="fas fa-arrow-right arrow"></i>
         <div class="team-box winner-box" id="thangBK3">Thắng Bán Kết 3</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box third-place-box" id="giaBa">Giải Ba</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu4A">(6) Thứ 4 A</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu3B">(7) Thứ 3 B</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box" id="banKet4">(12) Bán Kết 4</div>
+        <i class="fas fa-arrow-right arrow"></i>
         <div class="team-box winner-box" id="thangBK4">Thắng Bán Kết 4</div>
       </div>
+      <div class="bracket-row">
+        <div class="team-box" id="thu2A">(8) Thứ 2 A</div>
+      </div>
+    </div>
 
-      <!-- Cột 4: Vô Địch và Giải Ba -->
-      <div class="d-flex flex-column justify-content-around" style="width: 150px; height: 400px; margin-left: 50px;">
-        <div class="team-box winner-box" id="voDich">Vô Địch</div>
-        <div class="team-box third-place-box" id="giaBa">Giải Ba</div>
+    <div class="cup-container">
+      <h3>Cúp Vua Vòng Loại</h3>
+      <div class="bracket-row">
+        <div class="team-box" id="vongLoai1">Vòng Loại 1 SA</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box" id="chungKetVongLoai1">Chung kết vòng loại 1</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box winner-box" id="vuaVongLoai">Vua Vong Loai</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="vongLoai2">Vòng Loại 2 6B</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="vongLoai3">Vòng Loại 3 5B</div>
+        <i class="fas fa-arrow-right arrow"></i>
+        <div class="team-box" id="chungKetVongLoai2">Chung kết vòng loại 2</div>
+      </div>
+      <div class="bracket-row">
+        <div class="team-box" id="vongLoai4">Vòng Loại 4 6A</div>
       </div>
     </div>
   </div>
@@ -154,11 +188,15 @@
         document.getElementById('thu3A').innerText = data[2].team; // Hạng 3 Bảng A
         document.getElementById('thu4A').innerText = data[3].team; // Hạng 4 Bảng A
         document.getElementById('thu2A').innerText = data[1].team; // Hạng 2 Bảng A
+        document.getElementById('vongLoai4').innerText = 'Vòng Loại 4 ' + data[5].team; // Hạng 6 Bảng A
       } else if (table === 'B') {
         document.getElementById('thu4B').innerText = data[3].team; // Hạng 4 Bảng B
         document.getElementById('thu2B').innerText = data[1].team; // Hạng 2 Bảng B
         document.getElementById('nhatB').innerText = data[0].team; // Hạng 1 Bảng B
         document.getElementById('thu3B').innerText = data[2].team; // Hạng 3 Bảng B
+        document.getElementById('vongLoai1').innerText = 'Vòng Loại 1 ' + data[4].team; // Hạng 5 Bảng B
+        document.getElementById('vongLoai2').innerText = 'Vòng Loại 2 ' + data[5].team; // Hạng 6 Bảng B
+        document.getElementById('vongLoai3').innerText = 'Vòng Loại 3 ' + data[4].team; // Hạng 5 Bảng B (nếu cần điều chỉnh)
       }
     }
 
