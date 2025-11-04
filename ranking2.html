@@ -17,11 +17,11 @@
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-    .bracket-container { margin-top: 40px; }
-    .orgchart { background: transparent; }
-    .orgchart .node .title { background-color: #28a745; color: white; }
-    .orgchart .node .content { background-color: #e9ecef; color: black; }
+    #orgchart { margin-top: 40px; }
+    .orgchart .node { background-color: #28a745; color: white; }
+    .orgchart .node .content { background-color: #e3f2fd; color: #0d6efd; }
     .orgchart .edge { border-color: #28a745; }
+    .loading { text-align: center; color: #888; font-style: italic; }
   </style>
 </head>
 <body>
@@ -38,7 +38,7 @@
           <th>Hiệu số</th>
         </tr>
       </thead>
-      <tbody id="tableA"></tbody>
+      <tbody id="tableA"><tr><td colspan="4" class="loading">Đang tải...</td></tr></tbody>
     </table>
     <div class="chart-container"><canvas id="chartA"></canvas></div>
 
@@ -52,7 +52,7 @@
           <th>Hiệu số</th>
         </tr>
       </thead>
-      <tbody id="tableB"></tbody>
+      <tbody id="tableB"><tr><td colspan="4" class="loading">Đang tải...</td></tr></tbody>
     </table>
     <div class="chart-container"><canvas id="chartB"></canvas></div>
 
@@ -113,7 +113,7 @@
       });
 
       drawChart(chartId, teams, points, goalDiff);
-      return filteredData; // Trả về để dùng cho OrgChart
+      return filteredData; // Trả về dữ liệu đã sắp xếp để dùng cho sơ đồ
     }
 
     function drawChart(chartId, teams, points, goalDiff) {
@@ -145,55 +145,35 @@
       drawOrgChart(dataA, dataB);
     }
 
-    function drawOrgChart(a, b) {
-      const nodes = [
-        { id: '1', name: a[0].team + '<br>(1) Nhất A' },
-        { id: '2', name: b[3].team + '<br>(2) Thứ 4 B' },
-        { id: '3', name: a[2].team + '<br>(3) Thứ 3 A' },
-        { id: '4', name: b[1].team + '<br>(4) Thứ 2 B' },
-        { id: '5', name: b[0].team + '<br>(5) Nhất B' },
-        { id: '6', name: a[3].team + '<br>(6) Thứ 4 A' },
-        { id: '7', name: b[2].team + '<br>(7) Thứ 3 B' },
-        { id: '8', name: a[1].team + '<br>(8) Thứ 2 A' },
+    function drawOrgChart(dataA, dataB) {
+      const nodes = {
+        name: 'Vô Địch',
+        children: [
+          { name: 'Thắng Bán Kết 1', children: [
+            { name: dataA[0].team + ' (Nhất A)' },
+            { name: dataB[3].team + ' (Thứ 4 B)' }
+          ]},
+          { name: 'Thắng Bán Kết 2', children: [
+            { name: dataA[2].team + ' (Thứ 3 A)' },
+            { name: dataB[1].team + ' (Thứ 2 B)' }
+          ]},
+          { name: 'Thắng Bán Kết 3', children: [
+            { name: dataB[0].team + ' (Nhất B)' },
+            { name: dataA[3].team + ' (Thứ 4 A)' }
+          ]},
+          { name: 'Thắng Bán Kết 4', children: [
+            { name: dataB[2].team + ' (Thứ 3 B)' },
+            { name: dataA[1].team + ' (Thứ 2 A)' }
+          ]}
+        ]
+      };
 
-        { id: '9', name: '(9) Bán Kết 1' },
-        { id: '10', name: '(10) Bán Kết 2' },
-        { id: '11', name: '(11) Bán Kết 3' },
-        { id: '12', name: '(12) Bán Kết 4' },
-
-        { id: 'thangBK1', name: 'Thắng Bán Kết 1' },
-        { id: 'thangBK2', name: 'Thắng Bán Kết 2' },
-        { id: 'thangBK3', name: 'Thắng Bán Kết 3' },
-        { id: 'thangBK4', name: 'Thắng Bán Kết 4' },
-
-        { id: 'voDich', name: 'Vô Địch' },
-        { id: 'giaBa', name: 'Giải Ba' },
-
-        { id: 'vongLoai1', name: 'Vòng Loại 1 SA' },
-        { id: 'chungKetVongLoai1', name: 'Chung kết vòng loại 1' },
-        { id: 'vongLoai2', name: 'Vòng Loại 2 6B' },
-        { id: 'chungKetVongLoai2', name: 'Chung kết vòng loại 2' },
-        { id: 'vongLoai3', name: 'Vòng Loại 3 5B' },
-        { id: 'vongLoai4', name: 'Vòng Loại 4 6A' },
-        { id: 'vuaVongLoai', name: 'Vua Vong Loai' }
-      ];
-
-      $( "#orgchart" ).orgchart({
+      // Vẽ sơ đồ
+      $('#orgchart').orgchart({
         data: nodes,
-        direction: 'l2r',
         nodeTitle: 'name',
         nodeContent: 'title',
-        createNode: function($node, data) {
-          // Kiểm tra nếu data.name tồn tại và là string trước khi gọi includes()
-          if (data.name && typeof data.name === 'string') {
-            if (data.name.includes("Vô Địch")) {
-              $node.addClass('winner-box');
-            }
-            if (data.name.includes("Giải Ba")) {
-              $node.addClass('third-place-box');
-            }
-          }
-        }
+        direction: 't2b'
       });
     }
 
