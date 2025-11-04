@@ -8,25 +8,46 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { padding: 20px; background: #f8f9fa; }
+    body { padding: 20px; background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
     .table thead { background-color: #28a745; color: white; }
     .chart-container { height: 300px; margin-top: 20px; }
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-    .bracket-container { margin-top: 40px; position: relative; }
-    .bracket-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .team-box { width: 150px; text-align: center; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .arrow { font-size: 1.5em; margin: 0 20px; color: #28a745; }
-    .winner-box { background: #28a745; color: white; font-weight: bold; }
-    .third-place-box { background: #ffc107; color: black; font-weight: bold; }
-    .cup-container { margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; }
+
+    /* SƠ ĐỒ ĐẤU LOẠI */
+    .bracket { margin-top: 50px; }
+    .match { display: flex; align-items: center; margin: 15px 0; position: relative; }
+    .team { 
+      width: 160px; 
+      padding: 10px; 
+      text-align: center; 
+      border: 1px solid #ccc; 
+      border-radius: 8px; 
+      background: #fff; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-weight: 500;
+    }
+    .team.green { background: #d4edda; border-color: #28a745; }
+    .team.blue { background: #d1ecf1; border-color: #17a2b8; }
+    .team.winner { background: #28a745; color: white; font-weight: bold; }
+    .team.third { background: #ffc107; color: black; font-weight: bold; }
+    .arrow { 
+      width: 50px; 
+      text-align: center; 
+      font-size: 1.5rem; 
+      color: #28a745; 
+      font-weight: bold;
+    }
+    .spacer { height: 60px; }
+    .cup-section { margin-top: 60px; border-top: 2px dashed #ddd; padding-top: 30px; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1 class="text-center mb-4">Xếp Hạng Giải Tennis Hưng Phú 2025</h1>
 
+    <!-- BẢNG A -->
     <h3>Bảng A</h3>
     <table class="table table-striped">
       <thead>
@@ -41,6 +62,7 @@
     </table>
     <div class="chart-container"><canvas id="chartA"></canvas></div>
 
+    <!-- BẢNG B -->
     <h3>Bảng B</h3>
     <table class="table table-striped">
       <thead>
@@ -55,79 +77,108 @@
     </table>
     <div class="chart-container"><canvas id="chartB"></canvas></div>
 
-    <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
-    <div class="bracket-container">
-      <div class="bracket-row">
-        <div class="team-box" id="nhatA">(1) Nhất A</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="banKet1">(9) Bán Kết 1</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="thangBK1">Thắng Bán Kết 1</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="voDich">Vô Địch</div>
+    <!-- SƠ ĐỒ ĐẤU LOẠI -->
+    <h3 class="mt-5">Sơ Đồ Đấu Loại Trực Tiếp</h3>
+    <div class="bracket">
+
+      <!-- BÁN KẾT 1 -->
+      <div class="match">
+        <div class="team green" id="nhatA">(1) Nhất A</div>
+        <div class="arrow">→</div>
+        <div class="team" id="banKet1">(9) Bán Kết 1</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="thangBK1">Thắng Bán Kết 1</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="voDich">Vô Địch</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu4B">(2) Thứ 4 B</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 2 -->
+      <div class="match">
+        <div class="team blue" id="thu4B">(2) Thứ 4 B</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu3A">(3) Thứ 3 A</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="banKet2">(10) Bán Kết 2</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="thangBK2">Thắng Bán Kết 2</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 3 -->
+      <div class="match">
+        <div class="team green" id="thu3A">(3) Thứ 3 A</div>
+        <div class="arrow">→</div>
+        <div class="team" id="banKet2">(10) Bán Kết 2</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="thangBK2">Thắng Bán Kết 2</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu2B">(4) Thứ 2 B</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 4 -->
+      <div class="match">
+        <div class="team blue" id="thu2B">(4) Thứ 2 B</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="nhatB">(5) Nhất B</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="banKet3">(11) Bán Kết 3</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="thangBK3">Thắng Bán Kết 3</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box third-place-box" id="giaBa">Giải Ba</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 5 -->
+      <div class="match">
+        <div class="team blue" id="nhatB">(5) Nhất B</div>
+        <div class="arrow">→</div>
+        <div class="team" id="banKet3">(11) Bán Kết 3</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="thangBK3">Thắng Bán Kết 3</div>
+        <div class="arrow">→</div>
+        <div class="team third" id="giaBa">Giải Ba</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu4A">(6) Thứ 4 A</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 6 -->
+      <div class="match">
+        <div class="team green" id="thu4A">(6) Thứ 4 A</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu3B">(7) Thứ 3 B</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="banKet4">(12) Bán Kết 4</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="thangBK4">Thắng Bán Kết 4</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 7 -->
+      <div class="match">
+        <div class="team blue" id="thu3B">(7) Thứ 3 B</div>
+        <div class="arrow">→</div>
+        <div class="team" id="banKet4">(12) Bán Kết 4</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="thangBK4">Thắng Bán Kết 4</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="thu2A">(8) Thứ 2 A</div>
+      <div class="spacer"></div>
+
+      <!-- BÁN KẾT 8 -->
+      <div class="match">
+        <div class="team green" id="thu2A">(8) Thứ 2 A</div>
       </div>
+
     </div>
 
-    <div class="cup-container">
+    <!-- CÚP VUA VÒNG LOẠI -->
+    <div class="cup-section">
       <h3>Cúp Vua Vòng Loại</h3>
-      <div class="bracket-row">
-        <div class="team-box" id="vongLoai1">Vòng Loại 1 SA</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="chungKetVongLoai1">Chung kết vòng loại 1</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box winner-box" id="vuaVongLoai">Vua Vong Loai</div>
+      <div class="match">
+        <div class="team" id="vongLoai1">Vòng Loại 1 - 5A</div>
+        <div class="arrow">→</div>
+        <div class="team" id="ckVongLoai1">Chung kết vòng loại 1</div>
+        <div class="arrow">→</div>
+        <div class="team winner" id="vuaVongLoai">Vua Vòng Loại</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="vongLoai2">Vòng Loại 2 6B</div>
+      <div class="spacer"></div>
+      <div class="match">
+        <div class="team" id="vongLoai2">Vòng Loại 2 - 6B</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="vongLoai3">Vòng Loại 3 5B</div>
-        <i class="fas fa-arrow-right arrow"></i>
-        <div class="team-box" id="chungKetVongLoai2">Chung kết vòng loại 2</div>
+      <div class="spacer"></div>
+      <div class="match">
+        <div class="team" id="vongLoai3">Vòng Loại 3 - 5B</div>
+        <div class="arrow">→</div>
+        <div class="team" id="ckVongLoai2">Chung kết vòng loại 2</div>
       </div>
-      <div class="bracket-row">
-        <div class="team-box" id="vongLoai4">Vòng Loại 4 6A</div>
+      <div class="spacer"></div>
+      <div class="match">
+        <div class="team" id="vongLoai4">Vòng Loại 4 - 6A</div>
       </div>
     </div>
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL đã cung cấp
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv';
 
     async function fetchData() {
       const response = await fetch(sheetUrl);
@@ -138,93 +189,59 @@
       return { headers, data };
     }
 
-    async function updateTable(tableId, chartId, table) {
+    async function updateAll() {
       const { headers, data } = await fetchData();
-      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
-        team: row[1],
-        matches: parseInt(row[2]) || 0,
-        wins: parseInt(row[3]) || 0,
-        losses: parseInt(row[4]) || 0,
-        points: parseInt(row[5]) || 0,
-        gamesWon: parseInt(row[6]) || 0,
-        gamesLost: parseInt(row[7]) || 0,
-        goalDiff: parseInt(row[8]) || 0,
-        rank: parseInt(row[9]) || 0
+      const tableA = data.filter(row => row[0] === 'A' && row[1] !== "").map(row => ({
+        team: row[1], rank: parseInt(row[9]) || 0
+      }));
+      const tableB = data.filter(row => row[0] === 'B' && row[1] !== "").map(row => ({
+        team: row[1], rank: parseInt(row[9]) || 0
       }));
 
-      // Sắp xếp theo rank tăng dần (1 đến 6)
-      filteredData.sort(function(a, b) {
-        return a.rank - b.rank;
+      // Sắp xếp theo rank
+      tableA.sort((a, b) => a.rank - b.rank);
+      tableB.sort((a, b) => a.rank - b.rank);
+
+      // Cập nhật bảng A
+      const tbodyA = document.getElementById('tableA');
+      tbodyA.innerHTML = '';
+      tableA.forEach((row, i) => {
+        let icon = '';
+        if (i === 0) icon = '<i class="fas fa-medal icon-gold"></i>';
+        else if (i === 1) icon = '<i class="fas fa-medal icon-silver"></i>';
+        else if (i === 2) icon = '<i class="fas fa-medal icon-bronze"></i>';
+        tbodyA.innerHTML += `<tr><td>${icon} ${row.rank}</td><td>${row.team}</td><td>—</td><td>—</td></tr>`;
       });
 
-      const tableBody = document.getElementById(tableId);
-      tableBody.innerHTML = '';
-      let points = [], teams = [], goalDiff = [];
-      filteredData.forEach(row => {
-        let iconClass = '';
-        if (row.rank === 1) iconClass = 'icon-gold';
-        else if (row.rank === 2) iconClass = 'icon-silver';
-        else if (row.rank === 3) iconClass = 'icon-bronze';
-        tableBody.innerHTML += `
-          <tr>
-            <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
-            <td>${row.team}</td>
-            <td>${row.points}</td>
-            <td>${row.goalDiff}</td>
-          </tr>
-        `;
-        teams.push(row.team);
-        points.push(row.points);
-        goalDiff.push(row.goalDiff);
+      // Cập nhật bảng B
+      const tbodyB = document.getElementById('tableB');
+      tbodyB.innerHTML = '';
+      tableB.forEach((row, i) => {
+        let icon = '';
+        if (i === 0) icon = '<i class="fas fa-medal icon-gold"></i>';
+        else if (i === 1) icon = '<i class="fas fa-medal icon-silver"></i>';
+        else if (i === 2) icon = '<i class="fas fa-medal icon-bronze"></i>';
+        tbodyB.innerHTML += `<tr><td>${icon} ${row.rank}</td><td>${row.team}</td><td>—</td><td>—</td></tr>`;
       });
 
-      drawChart(chartId, teams, points, goalDiff);
-      updateBracket(filteredData, table);  // Cập nhật sơ đồ
+      // Cập nhật sơ đồ
+      document.getElementById('nhatA').innerText = tableA[0].team;
+      document.getElementById('thu4B').innerText = tableB[3].team;
+      document.getElementById('thu3A').innerText = tableA[2].team;
+      document.getElementById('thu2B').innerText = tableB[1].team;
+      document.getElementById('nhatB').innerText = tableB[0].team;
+      document.getElementById('thu4A').innerText = tableA[3].team;
+      document.getElementById('thu3B').innerText = tableB[2].team;
+      document.getElementById('thu2A').innerText = tableA[1].team;
+
+      // Cúp Vua Vòng Loại
+      document.getElementById('vongLoai1').innerText = `Vòng Loại 1 - ${tableA[4].team}`;
+      document.getElementById('vongLoai2').innerText = `Vòng Loại 2 - ${tableB[5].team}`;
+      document.getElementById('vongLoai3').innerText = `Vòng Loại 3 - ${tableB[4].team}`;
+      document.getElementById('vongLoai4').innerText = `Vòng Loại 4 - ${tableA[5].team}`;
     }
 
-    function updateBracket(data, table) {
-      if (table === 'A') {
-        document.getElementById('nhatA').innerText = data[0].team; // Hạng 1 Bảng A
-        document.getElementById('thu3A').innerText = data[2].team; // Hạng 3 Bảng A
-        document.getElementById('thu4A').innerText = data[3].team; // Hạng 4 Bảng A
-        document.getElementById('thu2A').innerText = data[1].team; // Hạng 2 Bảng A
-        document.getElementById('vongLoai4').innerText = 'Vòng Loại 4 ' + data[5].team; // Hạng 6 Bảng A
-      } else if (table === 'B') {
-        document.getElementById('thu4B').innerText = data[3].team; // Hạng 4 Bảng B
-        document.getElementById('thu2B').innerText = data[1].team; // Hạng 2 Bảng B
-        document.getElementById('nhatB').innerText = data[0].team; // Hạng 1 Bảng B
-        document.getElementById('thu3B').innerText = data[2].team; // Hạng 3 Bảng B
-        document.getElementById('vongLoai1').innerText = 'Vòng Loại 1 ' + data[4].team; // Hạng 5 Bảng B
-        document.getElementById('vongLoai2').innerText = 'Vòng Loại 2 ' + data[5].team; // Hạng 6 Bảng B
-        document.getElementById('vongLoai3').innerText = 'Vòng Loại 3 ' + data[4].team; // Hạng 5 Bảng B (nếu cần điều chỉnh)
-      }
-    }
-
-    function drawChart(chartId, teams, points, goalDiff) {
-      const ctx = document.getElementById(chartId).getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: teams,
-          datasets: [{
-            label: 'Điểm',
-            data: points,
-            backgroundColor: '#28a745'
-          }, {
-            label: 'Hiệu số',
-            data: goalDiff,
-            backgroundColor: '#ffc107'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: { y: { beginAtZero: true } }
-        }
-      });
-    }
-
-    updateTable('tableA', 'chartA', 'A');
-    updateTable('tableB', 'chartB', 'B');
+    updateAll();
   </script>
 </body>
 </html>
