@@ -178,14 +178,21 @@
         { id: 'vuaVongLoai', name: 'Vua Vong Loai' }
       ];
 
-      $('#orgchart').orgchart({
+      $( "#orgchart" ).orgchart({
         data: nodes,
         direction: 'l2r',
         nodeTitle: 'name',
         nodeContent: 'title',
         createNode: function($node, data) {
-          if (data.name.includes('Vô Địch')) $node.addClass('winner-box');
-          if (data.name.includes('Giải Ba')) $node.addClass('third-place-box');
+          // Kiểm tra nếu data.name tồn tại và là string trước khi gọi includes()
+          if (data.name && typeof data.name === 'string') {
+            if (data.name.includes("Vô Địch")) {
+              $node.addClass('winner-box');
+            }
+            if (data.name.includes("Giải Ba")) {
+              $node.addClass('third-place-box');
+            }
+          }
         }
       });
     }
