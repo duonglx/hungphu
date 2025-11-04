@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xếp Hạng Giải Tennis Hưng Phú 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { padding: 20px; background: #f8f9fa; }
+    .table thead { background-color: #28a745; color: white; }
+    .chart-container { height: 300px; margin-top: 20px; }
+    .icon-gold { color: gold; }
+    .icon-silver { color: silver; }
+    .icon-bronze { color: #cd7f32; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center mb-4">Xếp Hạng Giải Tennis Hưng Phú 2025</h1>
+
+    <h3>Bảng A</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th>Đội</th>
+          <th>Điểm</th>
+          <th>Hiệu số</th>
+        </tr>
+      </thead>
+      <tbody id="tableA"></tbody>
+    </table>
+    <div class="chart-container"><canvas id="chartA"></canvas></div>
+
+    <h3>Bảng B</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th>Đội</th>
+          <th>Điểm</th>
+          <th>Hiệu số</th>
+        </tr>
+      </thead>
+      <tbody id="tableB"></tbody>
+    </table>
+    <div class="chart-container"><canvas id="chartB"></canvas></div>
+  </div>
+
+  <script>
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // Thay bằng URL publish CSV từ Sheet "Xếp hạng" của anh/chị
+
+    async function fetchData() {
+      const response = await fetch(sheetUrl);
+      const text = await response.text();
+      const lines = text.split('\n');
+      const headers = lines[0].split(',');
+      const data = lines.slice(1).map(line => line.split(','));
+      return { headers, data };
+    }
+
+    async function updateTable(tableId, chartId, table) {
+      const { headers, data } = await fetchData();
+      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
+        team: row[1],
+        matches: parseInt(row[2]) || 0,
+        wins: parseInt(row[3]) || 0,
+        losses: parseInt(row[4]) || 0,
+        points: parseInt(row[5]) || 0,
+        gamesWon: parseInt(row[6]) || 0,
+        gamesLost: parseInt(row[7]) || 0,
+        goalDiff: parseInt(row[8]) || 0,
+        rank: parseInt(row[9]) || 0
+      }));
+
+      // Sắp xếp theo rank tăng dần (1 đến 6)
+      filteredData.sort((a, b) => a.rank - b.rank);
+
+      const tableBody = document.getElementById(tableId);
+      tableBody.innerHTML = '';
+      let points = [], teams = [], goalDiff = [];
+      filteredData.forEach(row => {
+        let iconClass = '';
+        if (row.rank === 1) iconClass = 'icon-gold';
+        else if (row.rank === 2) iconClass = 'icon-silver';
+        else if (row.rank === 3) iconClass = 'icon-bronze';
+        tableBody.innerHTML += `
+          <tr>
+            <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
+            <td>${row.team}</td>
+            <td>${row.points}</td>
+            <td>${row.goalDiff}</td>
+          </tr>
+        `;
+        teams.push(row.team);
+        points.push(row.points);
+        goalDiff.push(row.goalDiff);
+      });
+
+      drawChart(chartId, teams, points, goalDiff);
+    }
+
+    function drawChart(chartId, teams, points, goalDiff) {
+      const ctx = document.getElementById(chartId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: teams,
+          datasets: [{
+            label: 'Điểm',
+            data: points,
+            backgroundColor: '#28a745'
+          }, {
+            label: 'Hiệu số',
+            data: goalDiff,
+            backgroundColor: '#ffc107'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    updateTable('tableA', 'chartA', 'A');
+    updateTable('tableB', 'chartB', 'B');
+  </script>
+</body>
+</html>
