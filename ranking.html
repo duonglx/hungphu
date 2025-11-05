@@ -49,10 +49,48 @@
       <tbody id="tableB"></tbody>
     </table>
     <!-- <div class="chart-container"><canvas id="chartB"></canvas></div> -->
+
+    <h3>Thông Tin Đấu - Bảng A</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Bảng</th>
+          <th>Trận</th>
+          <th>Đội 1</th>
+          <th>Đội 2</th>
+          <th>Tỷ số Đội 1</th>
+          <th>Tỷ số Đội 2</th>
+          <th>Đội thắng</th>
+          <th>Trạng Thái</th>
+          <th>Ngày đấu</th>
+        </tr>
+      </thead>
+      <tbody id="matchA"></tbody>
+    </table>
+
+    <h3>Thông Tin Đấu - Bảng B</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Bảng</th>
+          <th>Trận</th>
+          <th>Đội 1</th>
+          <th>Đội 2</th>
+          <th>Tỷ số Đội 1</th>
+          <th>Tỷ số Đội 2</th>
+          <th>Đội thắng</th>
+          <th>Trạng Thái</th>
+          <th>Ngày đấu</th>
+        </tr>
+      </thead>
+      <tbody id="matchB"></tbody>
+    </table>
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // Thay bằng URL publish CSV từ Sheet "Xếp hạng" của anh/chị
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
+
+    const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
 
     async function fetchData() {
       const response = await fetch(sheetUrl);
@@ -105,6 +143,39 @@
       //drawChart(chartId, teams, points, goalDiff);
     }
 
+    async function updateMatchTable(tableId, table) {
+      const { headers, data } = await fetchData(matchUrl);
+      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
+        bang: row[0],
+        tran: row[1],
+        doi1: row[2],
+        doi2: row[3],
+        tyso1: row[4],
+        tyso2: row[5],
+        doithang: row[6],
+        trangthai: row[7],
+        ngaydau: row[8]
+      }));
+
+      const tableBody = document.getElementById(tableId);
+      tableBody.innerHTML = '';
+      filteredData.forEach(row => {
+        tableBody.innerHTML += `
+          <tr>
+            <td>${row.bang}</td>
+            <td>${row.tran}</td>
+            <td>${row.doi1}</td>
+            <td>${row.doi2}</td>
+            <td>${row.tyso1}</td>
+            <td>${row.tyso2}</td>
+            <td>${row.doithang}</td>
+            <td>${row.trangthai}</td>
+            <td>${row.ngaydau}</td>
+          </tr>
+        `;
+      });
+    }
+
     function drawChart(chartId, teams, points, goalDiff) {
       const ctx = document.getElementById(chartId).getContext('2d');
       new Chart(ctx, {
@@ -128,8 +199,15 @@
       });
     }
 
-    updateTable('tableA', 'chartA', 'A');
-    updateTable('tableB', 'chartB', 'B');
+    async function loadData() {
+      await updateTable('tableA', 'chartA', 'A');
+      await updateTable('tableB', 'chartB', 'B');
+      await updateMatchTable('matchA', 'A');
+      await updateMatchTable('matchB', 'B');
+    }
+
+    loadData();
+
   </script>
 </body>
 </html>
