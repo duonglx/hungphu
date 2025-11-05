@@ -24,8 +24,9 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th><i class="fas fa-trophy"></i></th>
           <th>Đội</th>
+          <th>Trận</th>
           <th>Điểm</th>
           <th>Hiệu số</th>
         </tr>
@@ -38,8 +39,9 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th><i class="fas fa-trophy"></i>/th>
           <th>Đội</th>
+          <th>Trận</th>
           <th>Điểm</th>
           <th>Hiệu số</th>
         </tr>
@@ -52,8 +54,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Bảng</th>
-          <th>Trận</th>
+          <th>Trận đấu</th>
           <th>Đội 1</th>
           <th>Đội 2</th>
           <th>Tỷ số Đội 1</th>
@@ -70,8 +71,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Bảng</th>
-          <th>Trận</th>
+          <th>Trận đấu</th>
           <th>Đội 1</th>
           <th>Đội 2</th>
           <th>Tỷ số Đội 1</th>
@@ -129,6 +129,7 @@
           <tr>
             <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
+            <td>${row.matches}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
           </tr>
@@ -159,8 +160,7 @@
       tableBody.innerHTML = '';
       filteredData.forEach(row => {
         tableBody.innerHTML += `
-          <tr>
-            <td>${row.bang}</td>
+          <tr> 
             <td>${row.tran}</td>
             <td>${row.doi1}</td>
             <td>${row.doi2}</td>
@@ -168,7 +168,6 @@
             <td>${row.tyso2}</td>
             <td>${row.doithang}</td>
             <td>${row.trangthai}</td>
-            <td>${row.ngaydau}</td>
           </tr>
         `;
       });
