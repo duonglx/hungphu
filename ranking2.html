@@ -32,6 +32,21 @@
       .card-header { font-size: 1rem; }
     }
   </style>
+  <style>
+  body { padding: 20px; background: #f8f9fa; }
+  .table thead { background-color: #28a745; color: white; }
+  .chart-container { height: 300px; margin-top: 20px; }
+  .icon-gold { color: gold !important; animation: pulse 2s infinite; }
+  .icon-silver { color: silver !important; animation: pulse 2s infinite; }
+  .icon-bronze { color: #cd7f32 !important; animation: pulse 2s infinite; }
+  .icon-blue { color: #0d6efd !important; animation: pulse 2s infinite; }
+  .icon-gray { color: gray !important; animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+</style>
 </head>
 <body>
   <div class="header">
@@ -173,7 +188,7 @@
         else iconClass = 'icon-gray'; // Hạng 5 và 6 cùng màu xám
         tableBody.innerHTML += `
           <tr>
-            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>
+            <td><i class="fas fa-trophy ${iconClass}" style="color: inherit !important;"></i> ${row.rank}</td>
             <td>${row.team}</td>
             <td>${row.matches}</td>
             <td>${row.points}</td>
