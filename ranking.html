@@ -24,10 +24,9 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th><i class="fas fa-trophy"></i></th>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
           <th>Đội</th>
           <th>Điểm</th>
-          <th>Trận</th>
           <th>Hiệu số</th>
         </tr>
       </thead>
@@ -39,10 +38,9 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th><i class="fas fa-trophy"></i></th>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
           <th>Đội</th>
           <th>Điểm</th>
-          <th>Trận</th>
           <th>Hiệu số</th>
         </tr>
       </thead>
@@ -89,11 +87,10 @@
 
   <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
-
     const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
 
-    async function fetchData() {
-      const response = await fetch(sheetUrl);
+    async function fetchData(url) {
+      const response = await fetch(url);
       const text = await response.text();
       const lines = text.split('\n');
       const headers = lines[0].split(',');
@@ -102,7 +99,7 @@
     }
 
     async function updateTable(tableId, chartId, table) {
-      const { headers, data } = await fetchData();
+      const { headers, data } = await fetchData(sheetUrl);
       const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
         team: row[1],
         matches: parseInt(row[2]) || 0,
@@ -116,7 +113,9 @@
       }));
 
       // Sắp xếp theo rank tăng dần (1 đến 6)
-      filteredData.sort((a, b) => a.rank - b.rank);
+      filteredData.sort(function(a, b) {
+        return a.rank - b.rank;
+      });
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
@@ -131,7 +130,6 @@
             <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
             <td>${row.points}</td>
-            <td>${row.matches}</td>
             <td>${row.goalDiff}</td>
           </tr>
         `;
@@ -140,7 +138,7 @@
         goalDiff.push(row.goalDiff);
       });
 
-      //drawChart(chartId, teams, points, goalDiff);
+      // drawChart(chartId, teams, points, goalDiff);
     }
 
     async function updateMatchTable(tableId, table) {
@@ -207,7 +205,6 @@
     }
 
     loadData();
-
   </script>
 </body>
 </html>
