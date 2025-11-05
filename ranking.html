@@ -4,83 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xếp Hạng Giải Tennis Hưng Phú Open 2 - 2025</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { padding: 20px; background: #f8f9fa; }
-    .table thead { background-color: #28a745; color: white; }
-    .chart-container { height: 300px; margin-top: 20px; }
-    .icon-gold { color: gold; }
-    .icon-silver { color: silver; }
-    .icon-bronze { color: #cd7f32; }
+    :root {
+      --shinhan-green: #28a745; --shinhan-blue: #0d6efd; --bg-light: #f8f9fa; --text-dark: #343a40;
+      --gold: gold; --silver: silver; --bronze: #cd7f32; --blue: #0d6efd; --gray: gray;
+    }
+    body { background: var(--bg-light); font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 15px; }
+    .header { background: var(--shinhan-blue); color: white; padding: 15px; text-align: center; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .card { border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    .card-header { background: var(--shinhan-green); color: white; font-weight: bold; padding: 10px 15px; text-align: center; }
+    .table { font-size: 0.9rem; margin-bottom: 0; }
+    .table td { transition: background 0.3s; }
+    .table tr:hover td { background: #e3f2fd; }
+    .medal { font-size: 1.2rem; margin-right: 5px; }
+    .chart-container { background: white; padding: 15px; border-radius: 0 0 15px 15px; }
+    .loading { text-align: center; padding: 20px; color: var(--text-dark); font-style: italic; }
+    .match-status { font-size: 0.8rem; padding: 2px 8px; border-radius: 12px; display: inline-block; }
+    .status-done { background: #d4edda; color: #155724; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    @media (max-width: 768px) {
+      .chart-container { height: 200px; }
+      .table { font-size: 0.8rem; }
+      .card-header { font-size: 1rem; }
+    }
+    /* Style cho filter */
+    .filter-input { width: 100%; padding: 5px; font-size: 0.8rem; border: 1px solid #ced4da; border-radius: 4px; }
   </style>
+  <style>
+  body { padding: 20px; background: #f8f9fa; }
+  .table thead { background-color: #28a745; color: white; }
+  .chart-container { height: 300px; margin-top: 20px; }
+  .icon-gold { color: gold !important; animation: pulse 2s infinite; }
+  .icon-silver { color: silver !important; animation: pulse 2s infinite; }
+  .icon-bronze { color: #cd7f32 !important; animation: pulse 2s infinite; }
+  .icon-blue { color: #0d6efd !important; animation: pulse 2s infinite; }
+  .icon-gray { color: gray !important; animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="text-center mb-4">Xếp Hạng Giải Tennis Hưng Phú Open 2 - 2025</h1>
+  <div class="header">
+    <h1 class="m-0">
+        <i class="fas fa-trophy text-warning"></i>
+        GIẢI TENNIS HƯNG PHÚ OPEN 2 - 2025</h1>
+  </div>
 
-    <h3><i class="fa-solid fa-table"></i> Xếp Hạng Bảng A</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th><i class="fas fa-trophy"></i></th>
-          <th>Đội</th>
-          <th>Trận</th>
-          <th>Điểm</th>
-          <th>Hiệu số</th>
-        </tr>
-      </thead>
-      <tbody id="tableA"></tbody>
-    </table>
-    <!-- <div class="chart-container"><canvas id="chartA"></canvas></div> -->
+  <div class="container py-4">
+    <div class="row g-4">
+      <div class="col-12 col-md-6">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-table-tennis me-2"></i> Bảng A</div>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Hạng</th>
+                  <th>Đội</th>
+                  <th>Trận</th>
+                  <th>Điểm</th>
+                  <th>HS</th>
+                </tr>
+              </thead>
+              <tbody id="tableA"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-    <h3><i class="fa-solid fa-table"></i> Xếp Hạng Bảng B</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th><i class="fas fa-trophy"></i></th>
-          <th>Đội</th>
-          <th>Trận</th>
-          <th>Điểm</th>
-          <th>Hiệu số</th>
-        </tr>
-      </thead>
-      <tbody id="tableB"></tbody>
-    </table>
-    <!-- <div class="chart-container"><canvas id="chartB"></canvas></div> -->
+      <div class="col-12 col-md-6">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-table-tennis me-2"></i> Bảng B</div>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Hạng</th>
+                  <th>Đội</th>
+                  <th>Trận</th>
+                  <th>Điểm</th>
+                  <th>HS</th>
+                </tr>
+              </thead>
+              <tbody id="tableB"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <h3><i class="fa-solid fa-table-tennis-paddle-ball"></i> Thông Tin Đấu Vòng Loại - Bảng A</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Trận đấu</th>
-          <th>Đội 1</th>
-          <th>Đội 2</th>
-          <th>Tỷ số Đội 1</th>
-          <th>Tỷ số Đội 2</th>
-          <th>Đội thắng</th>
-          <th>Trạng Thái</th>
-        </tr>
-      </thead>
-      <tbody id="matchA"></tbody>
-    </table>
+    <div class="row g-4 mt-4">
+      <div class="col-12 col-md-6">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-calendar-check me-2"></i> Thông Tin Đấu - Bảng A</div>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Đội 1</th>
+                  <th>Đội 2</th>
+                  <th>Tỷ số Đội 1</th>
+                  <th>Tỷ số Đội 2</th>
+                  <th>Đội thắng</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="matchA" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-    <h3><i class="fa-solid fa-table-tennis-paddle-ball"></i> Thông Tin Đấu Vòng Loại - Bảng B</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Trận đấu</th>
-          <th>Đội 1</th>
-          <th>Đội 2</th>
-          <th>Tỷ số Đội 1</th>
-          <th>Tỷ số Đội 2</th>
-          <th>Đội thắng</th>
-          <th>Trạng Thái</th>
-        </tr>
-      </thead>
-      <tbody id="matchB"></tbody>
-    </table>
+      <div class="col-12 col-md-6">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-calendar-check me-2"></i> Thông Tin Đấu - Bảng B</div>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Đội 1</th>
+                  <th>Đội 2</th>
+                  <th>Tỷ số Đội 1</th>
+                  <th>Tỷ số Đội 2</th>
+                  <th>Đội thắng</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="matchB" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -96,7 +158,7 @@
       return { headers, data };
     }
 
-    async function updateTable(tableId, chartId, table) {
+    async function updateTable(tableId, table) {
       const { headers, data } = await fetchData(sheetUrl);
       const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
         team: row[1],
@@ -117,27 +179,23 @@
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
-      let points = [], teams = [], goalDiff = [];
       filteredData.forEach(row => {
         let iconClass = '';
         if (row.rank === 1) iconClass = 'icon-gold';
         else if (row.rank === 2) iconClass = 'icon-silver';
         else if (row.rank === 3) iconClass = 'icon-bronze';
+        else if (row.rank === 4) iconClass = 'icon-blue';
+        else iconClass = 'icon-gray'; // Hạng 5 và 6 cùng màu xám
         tableBody.innerHTML += `
           <tr>
-            <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
+            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
             <td>${row.matches}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
           </tr>
         `;
-        teams.push(row.team);
-        points.push(row.points);
-        goalDiff.push(row.goalDiff);
       });
-
-      // drawChart(chartId, teams, points, goalDiff);
     }
 
     async function updateMatchTable(tableId, table) {
@@ -150,16 +208,32 @@
         tyso1: row[4],
         tyso2: row[5],
         doithang: row[6],
-        trangthai: row[7],
-        ngaydau: row[8]
+        trangthai: row[7]
       }));
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
+
+      // Thu thập unique teams, winners và status
+      const uniqueTeams = new Set();
+      const uniqueWinners = new Set();
+      const uniqueStatus = new Set();
+      filteredData.forEach(row => {
+        uniqueTeams.add(row.doi1);
+        uniqueTeams.add(row.doi2);
+        uniqueWinners.add(row.doithang);
+        uniqueStatus.add(row.trangthai);
+      });
+
+      // Lưu vào dataset
+      tableBody.dataset.originalRows = JSON.stringify(filteredData);
+      tableBody.dataset.uniqueTeams = JSON.stringify(Array.from(uniqueTeams));
+      tableBody.dataset.uniqueWinners = JSON.stringify(Array.from(uniqueWinners));
+      tableBody.dataset.uniqueStatus = JSON.stringify(Array.from(uniqueStatus));
+
       filteredData.forEach(row => {
         tableBody.innerHTML += `
-          <tr> 
-            <td>${row.tran}</td>
+          <tr>
             <td>${row.doi1}</td>
             <td>${row.doi2}</td>
             <td>${row.tyso1}</td>
@@ -171,34 +245,126 @@
       });
     }
 
-    function drawChart(chartId, teams, points, goalDiff) {
-      const ctx = document.getElementById(chartId).getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: teams,
-          datasets: [{
-            label: 'Điểm',
-            data: points,
-            backgroundColor: '#28a745'
-          }, {
-            label: 'Hiệu số',
-            data: goalDiff,
-            backgroundColor: '#ffc107'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: { y: { beginAtZero: true } }
+    // Hàm thêm filter
+    function addFilters(tableId) {
+      const table = document.querySelector(`#${tableId}`).closest('table');
+      const thead = table.querySelector('thead');
+      const tbody = table.querySelector('tbody');
+      const uniqueTeams = JSON.parse(tbody.dataset.uniqueTeams || '[]');
+      const uniqueWinners = JSON.parse(tbody.dataset.uniqueWinners || '[]');
+      const uniqueStatus = JSON.parse(tbody.dataset.uniqueStatus || '[]');
+
+      const filterRow = document.createElement('tr');
+
+      // Tạo datalist cho teams (riêng cho tableId)
+      const teamsDatalistId = `teamsList_${tableId}`;
+      const teamsDatalist = document.createElement('datalist');
+      teamsDatalist.id = teamsDatalistId;
+      uniqueTeams.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team;
+        teamsDatalist.appendChild(option);
+      });
+      document.body.appendChild(teamsDatalist);
+
+      // Tạo datalist cho winners (riêng cho tableId)
+      const winnersDatalistId = `winnersList_${tableId}`;
+      const winnersDatalist = document.createElement('datalist');
+      winnersDatalist.id = winnersDatalistId;
+      uniqueWinners.forEach(winner => {
+        const option = document.createElement('option');
+        option.value = winner;
+        winnersDatalist.appendChild(option);
+      });
+      document.body.appendChild(winnersDatalist);
+
+      const headers = thead.querySelector('tr').children;
+      Array.from(headers).forEach((header, index) => {
+        const th = document.createElement('th');
+        let filterElement;
+
+        if (index === 0 || index === 1) { // Cột Đội 1 và Đội 2: autocomplete
+          filterElement = document.createElement('input');
+          filterElement.type = 'text';
+          filterElement.className = 'filter-input';
+          filterElement.placeholder = 'Lọc (autocomplete)...';
+          filterElement.setAttribute('list', teamsDatalistId);
+        } else if (index === 4) { // Cột Đội thắng: autocomplete mới
+          filterElement = document.createElement('input');
+          filterElement.type = 'text';
+          filterElement.className = 'filter-input';
+          filterElement.placeholder = 'Lọc (autocomplete)...';
+          filterElement.setAttribute('list', winnersDatalistId);
+        } else if (index === 5) { // Cột Trạng Thái: combobox (select)
+          filterElement = document.createElement('select');
+          filterElement.className = 'filter-input';
+          const defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.text = 'Tất cả';
+          filterElement.appendChild(defaultOption);
+          uniqueStatus.forEach(status => {
+            const option = document.createElement('option');
+            option.value = status;
+            option.text = status;
+            filterElement.appendChild(option);
+          });
+        } else { // Các cột khác (bao gồm Tỷ số Đội 1/2): không tạo filter
+          // Để rỗng để bỏ lọc
         }
+
+        if (filterElement) {
+          th.appendChild(filterElement);
+        }
+        filterRow.appendChild(th);
+      });
+
+      thead.appendChild(filterRow);
+
+      // Xử lý sự kiện filter (vẫn lọc dựa trên tất cả filter values, nhưng index 2/3 sẽ luôn empty)
+      const filters = filterRow.querySelectorAll('input, select');
+      filters.forEach((filterElement, index) => {
+        const eventType = filterElement.tagName === 'SELECT' ? 'change' : 'input';
+        filterElement.addEventListener(eventType, () => {
+          const originalData = JSON.parse(tbody.dataset.originalRows || '[]');
+          const filterValues = Array.from(headers).map((_, i) => {
+            // Map filter values theo index gốc, index 2/3 luôn ''
+            if (i === 2 || i === 3) return '';
+            // Tính index thực của filters (vì filters chỉ có cho các cột có element)
+            let filterIndex = i;
+            if (i > 1) filterIndex -= 2; // Bù trừ vì bỏ 2 cột
+            if (i > 3 && i < 5) filterIndex += 2; // Điều chỉnh cho Đội thắng và Trạng Thái
+            return filters[filterIndex]?.value.toLowerCase() || '';
+          });
+
+          const filteredRows = originalData.filter(row => {
+            const rowValues = [row.doi1, row.doi2, row.tyso1, row.tyso2, row.doithang, row.trangthai].map(val => val.toLowerCase());
+            return filterValues.every((filter, i) => !filter || rowValues[i].includes(filter));
+          });
+
+          tbody.innerHTML = '';
+          filteredRows.forEach(row => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${row.doi1}</td>
+                <td>${row.doi2}</td>
+                <td>${row.tyso1}</td>
+                <td>${row.tyso2}</td>
+                <td>${row.doithang}</td>
+                <td>${row.trangthai}</td>
+              </tr>
+            `;
+          });
+        });
       });
     }
 
     async function loadData() {
-      await updateTable('tableA', 'chartA', 'A');
-      await updateTable('tableB', 'chartB', 'B');
+      await updateTable('tableA', 'A');
+      await updateTable('tableB', 'B');
       await updateMatchTable('matchA', 'A');
       await updateMatchTable('matchB', 'B');
+      addFilters('matchA');
+      addFilters('matchB');
     }
 
     loadData();
