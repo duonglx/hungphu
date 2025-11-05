@@ -3,330 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hưng Phú Tennis Open 2 - 2025</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <title>Xếp Hạng Giải Tennis Hưng Phú Open 2 - 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root {
-      --primary: #0d6efd;
-      --success: #28a745;
-      --gold: #ffc107;
-      --silver: #adb5bd;
-      --bronze: #cd7f32;
-    }
-    body {
-      background: linear-gradient(135deg, #f0f8ff 0%, #e3f2fd 100%);
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
-    }
-    .header {
-      background: var(--primary);
-      color: white;
-      padding: 1rem 0;
-      box-shadow: 0 4px 20px rgba(13,110,253,0.25);
-    }
-    .card {
-      border: none;
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-    .card:hover { transform: translateY(-5px); }
-    .card-header {
-      background: var(--success);
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-    .table {
-      font-size: 0.95rem;
-      margin-bottom: 0;
-    }
-    .rank-1 { background: linear-gradient(45deg, #ffd700, #ffec8b) !important; font-weight: bold; }
-    .rank-2 { background: #f8f9fa !important; }
-    .rank-3 { background: #fdfd96 !important; }
-    .medal { font-size: 1.2em; }
-    .chart-container {
-      position: relative;
-      height: 220px;
-      background: white;
-      border-radius: 0 0 1rem 1rem;
-    }
-    .match-status {
-      font-size: 0.8rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-    }
-    .status-done { background: #d4edda; color: #155724; }
-    .status-pending { background: #fff3cd; color: #856404; }
-    .bracket {
-      background: white;
-      border-radius: 1rem;
-      padding: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      margin-top: 30px;
-    }
-    .team-node {
-      background: #e3f2fd;
-      border: 2px solid var(--primary);
-      border-radius: 12px;
-      padding: 10px 15px;
-      text-align: center;
-      font-weight: 600;
-      min-width: 120px;
-    }
-    .arrow-line {
-      height: 4px;
-      background: var(--primary);
-      position: relative;
-    }
-    .arrow-line::after {
-      content: '';
-      position: absolute;
-      right: -10px;
-      top: -8px;
-      border: 10px solid transparent;
-      border-left-color: var(--primary);
-    }
-    .trophy-cup {
-      font-size: 4rem;
-      color: gold;
-      filter: drop-shadow(0 0 10px gold);
-    }
-    @media (max-width: 768px) {
-      .chart-container { height: 200px; }
-      .team-node { font-size: 0.9rem; min-width: 100px; }
-      .bracket { padding: 15px; }
-    }
+    body { padding: 20px; background: #f8f9fa; }
+    .table thead { background-color: #28a745; color: white; }
+    .chart-container { height: 300px; margin-top: 20px; }
+    .icon-gold { color: gold; }
+    .icon-silver { color: silver; }
+    .icon-bronze { color: #cd7f32; }
   </style>
 </head>
 <body>
-  <div class="header text-center">
-    <h1>
-      <i class="fas fa-trophy text-warning"></i>
-      GIẢI TENNIS HƯNG PHÚ OPEN 2 - 2025
-    </h1>
-    <p class="mb-0">Chung kết: 15/11/2025 | Gala Dinner: 18:00</p>
-  </div>
+  <div class="container">
+    <h1 class="text-center mb-4">Xếp Hạng Giải Tennis Hưng Phú Open 2 - 2025</h1>
 
-  <div class="container py-4">
-    <div class="row g-4">
-      <div class="col-12 col-md-6">
-        <div class="card">
-          <div class="card-header text-center">
-            <i class="fas fa-table-tennis"></i> BẢNG A
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead>
-                <tr>
-                  <th>Hạng</th>
-                  <th>Đội</th>
-                  <th>Điểm</th>
-                  <th>HS</th>
-                </tr>
-              </thead>
-              <tbody id="tableA"></tbody>
-            </table>
-          </div>
-          <div class="chart-container"><canvas id="chartA"></canvas></div>
-        </div>
-      </div>
+    <h3><i class="fa-solid fa-table"></i> Bảng A</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th>Đội</th>
+          <th>Điểm</th>
+          <th>Hiệu số</th>
+        </tr>
+      </thead>
+      <tbody id="tableA"></tbody>
+    </table>
+    <div class="chart-container"><canvas id="chartA"></canvas></div>
 
-      <div class="col-12 col-md-6">
-        <div class="card">
-          <div class="card-header text-center">
-            <i class="fas fa-table-tennis"></i> BẢNG B
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead>
-                <tr>
-                  <th>Hạng</th>
-                  <th>Đội</th>
-                  <th>Điểm</th>
-                  <th>HS</th>
-                </tr>
-              </thead>
-              <tbody id="tableB"></tbody>
-            </table>
-          </div>
-          <div class="chart-container"><canvas id="chartB"></canvas></div>
-        </div>
-      </div>
-    </div>
+    <h3><i class="fa-solid fa-table"></i> Bảng B</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><i class="fas fa-trophy"></i> Xếp hạng</th>
+          <th>Đội</th>
+          <th>Điểm</th>
+          <th>Hiệu số</th>
+        </tr>
+      </thead>
+      <tbody id="tableB"></tbody>
+    </table>
+    <div class="chart-container"><canvas id="chartB"></canvas></div>
 
-    <!-- BẢNG THÔNG TIN ĐẤU -->
-    <div class="row g-4 mt-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header text-center">
-            <i class="fas fa-list-alt"></i> THÔNG TIN ĐẤU VÒNG LOẠI
-          </div>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Bảng</th>
-                  <th>Trận</th>
-                  <th>Đội 1</th>
-                  <th>Đội 2</th>
-                  <th>Tỷ số</th>
-                  <th>Thắng</th>
-                  <th>Ngày</th>
-                  <th>Trạng thái</th>
-                </tr>
-              </thead>
-              <tbody id="matchAll"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h3>Thông Tin Đấu Vòng Loại - Bảng A</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Bảng</th>
+          <th>Trận</th>
+          <th>Đội 1</th>
+          <th>Đội 2</th>
+          <th>Tỷ số Đội 1</th>
+          <th>Tỷ số Đội 2</th>
+          <th>Đội thắng</th>
+          <th>Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody id="matchA"></tbody>
+    </table>
 
-    <!-- SƠ ĐỒ ĐẤU LOẠI -->
-    <div class="bracket mt-5">
-      <h3 class="text-center mb-4">
-        <i class="fas fa-sitemap"></i> SƠ ĐỒ ĐẤU LOẠI TRỰC TIẾP
-      </h3>
-      <div class="text-center trophy-cup mb-4">
-        <i class="fas fa-trophy"></i>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
-            <!-- Bán Kết 1 -->
-            <div class="team-node" id="bk1-team1">?</div>
-            <div class="arrow-line flex-fill"></div>
-            <div class="team-node" id="bk1">BÁN KẾT 1</div>
-            <div class="arrow-line flex-fill"></div>
-            <div class="team-node" id="bk1-team2">?</div>
-          </div>
-        </div>
-        <!-- Bán Kết 2 -->
-        <div class="col-12 mt-4">
-          <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
-            <div class="team-node" id="bk2-team1">?</div>
-            <div class="arrow-line flex-fill"></div>
-            <div class="team-node" id="bk2">BÁN KẾT 2</div>
-            <div class="arrow-line flex-fill"></div>
-            <div class="team-node" id="bk2-team2">?</div>
-          </div>
-        </div>
-        <!-- Chung Kết -->
-        <div class="col-12 mt-4">
-          <div class="d-flex justify-content-center align-items-center gap-3">
-            <div class="team-node winner" id="final1">THẮNG BK1</div>
-            <div class="arrow-line" style="width: 100px;"></div>
-            <div class="team-node winner" style="background: gold; color: #8b4513; font-size: 1.2em;">
-              CHUNG KẾT<br>15/11
-            </div>
-            <div class="arrow-line" style="width: 100px;"></div>
-            <div class="team-node winner" id="final2">THẮNG BK2</div>
-          </div>
-        </div>
-        <!-- Giải Ba -->
-        <div class="col-12 mt-4">
-          <div class="d-flex justify-content-center gap-3">
-            <div class="team-node" style="background: #cd7f32; color: white;" id="third1">THUA BK1</div>
-            <div class="team-node" style="background: #cd7f32; color: white;" id="third2">THUA BK2</div>
-          </div>
-          <div class="text-center mt-2">
-            <div class="team-node" style="background: #ffc107; color: black; display: inline-block;">
-              GIẢI BA
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h3>Thông Tin Đấu Vòng Loại - Bảng B</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Bảng</th>
+          <th>Trận</th>
+          <th>Đội 1</th>
+          <th>Đội 2</th>
+          <th>Tỷ số Đội 1</th>
+          <th>Tỷ số Đội 2</th>
+          <th>Đội thắng</th>
+          <th>Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody id="matchB"></tbody>
+    </table>
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv';
-    const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv';
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
+    const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
 
-    async function fetchCSV(url) {
-      const response = await fetch(url);
-      const text = await response.text();
-      const lines = text.split('\n').map(l => l.trim());
-      const headers = lines[0].split(',').map(h => h.trim());
-      const rows = lines.slice(1).filter(l => l);
-      return rows.map(line => {
-        const values = line.split(',').map(v => v.trim());
-        return Object.fromEntries(headers.map((h, i) => [h, values[i] || '']));
+    async function fetchData(url) {
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const lines = text.split('\n');
+        const headers = lines[0].split(',');
+        const data = lines.slice(1).map(line => line.split(','));
+        return { headers, data };
+      } catch (e) {
+        console.error('Lỗi fetch dữ liệu:', e);
+        return { headers: [], data: [] };
+      }
+    }
+
+    async function updateTable(tableId, chartId, table) {
+      const { headers, data } = await fetchData(sheetUrl);
+      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
+        team: row[1],
+        matches: parseInt(row[2]) || 0,
+        wins: parseInt(row[3]) || 0,
+        losses: parseInt(row[4]) || 0,
+        points: parseInt(row[5]) || 0,
+        gamesWon: parseInt(row[6]) || 0,
+        gamesLost: parseInt(row[7]) || 0,
+        goalDiff: parseInt(row[8]) || 0,
+        rank: parseInt(row[9]) || 0
+      }));
+
+      // Sắp xếp theo rank tăng dần (1 đến 6)
+      filteredData.sort(function(a, b) {
+        return a.rank - b.rank;
+      });
+
+      const tableBody = document.getElementById(tableId);
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        let points = [], teams = [], goalDiff = [];
+        filteredData.forEach(row => {
+          let iconClass = '';
+          if (row.rank === 1) iconClass = 'icon-gold';
+          else if (row.rank === 2) iconClass = 'icon-silver';
+          else if (row.rank === 3) iconClass = 'icon-bronze';
+          tableBody.innerHTML += `
+            <tr>
+              <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
+              <td>${row.team}</td>
+              <td>${row.points}</td>
+              <td>${row.goalDiff}</td>
+            </tr>
+          `;
+          teams.push(row.team);
+          points.push(row.points);
+          goalDiff.push(row.goalDiff);
+        });
+
+        drawChart(chartId, teams, points, goalDiff);
+      } else {
+        console.error('Không tìm thấy tbody với id ' + tableId);
+      }
+    }
+
+    async function updateMatchTable(tableId, table) {
+      const { headers, data } = await fetchData(matchUrl);
+      const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
+        bang: row[0],
+        tran: row[1],
+        doi1: row[2],
+        doi2: row[3],
+        tyso1: row[4],
+        tyso2: row[5],
+        doithang: row[6],
+        trangthai: row[7]
+      }));
+
+      const tableBody = document.getElementById(tableId);
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        filteredData.forEach(row => {
+          tableBody.innerHTML += `
+            <tr>
+              <td>${row.bang}</td>
+              <td>${row.tran}</td>
+              <td>${row.doi1}</td>
+              <td>${row.doi2}</td>
+              <td>${row.tyso1}</td>
+              <td>${row.tyso2}</td>
+              <td>${row.doithang}</td>
+              <td>${row.trangthai}</td>
+            </tr>
+          `;
+        });
+      } else {
+        console.error('Không tìm thấy tbody với id ' + tableId);
+      }
+    }
+
+    function drawChart(chartId, teams, points, goalDiff) {
+      const ctx = document.getElementById(chartId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: teams,
+          datasets: [{
+            label: 'Điểm',
+            data: points,
+            backgroundColor: '#28a745'
+          }, {
+            label: 'Hiệu số',
+            data: goalDiff,
+            backgroundColor: '#ffc107'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
       });
     }
 
     async function loadData() {
-      try {
-        const ranking = await fetchCSV(sheetUrl);
-        const matches = await fetchCSV(matchUrl);
-
-        // Xếp hạng
-        const tableA = ranking.filter(r => r.Bảng === 'A');
-        const tableB = ranking.filter(r => r.Bảng === 'B');
-        renderRanking('tableA', tableA);
-        renderRanking('tableB', tableB);
-
-        // Thông tin đấu
-        renderMatches('matchA', matches.filter(m => m.Bảng === 'A'));
-        renderMatches('matchB', matches.filter(m => m.Bảng === 'B'));
-
-        // Sơ đồ
-        updateBracket(tableA, tableB);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    function renderRanking(id, data) {
-      const tbody = document.getElementById(id);
-      tbody.innerHTML = data.map(r => {
-        const medal = r['Xếp hạng'] == 1 ? '🥇' : r['Xếp hạng'] == 2 ? '🥈' : r['Xếp hạng'] == 3 ? '🥉' : r['Xếp hạng'];
-        return `<tr>
-          <td><strong>${medal}</strong></td>
-          <td><strong>${r.Đội}</strong></td>
-          <td>${r.Điểm}</td>
-          <td>${r['Hiệu số']}</td>
-        </tr>`;
-      }).join('');
-    }
-
-    function renderMatches(id, data) {
-      const tbody = document.getElementById(id);
-      tbody.innerHTML = data.map(m => {
-        const status = m['Trạng Thái'] || (m['Tỷ số Đội 1'] ? 'Đã đấu' : 'Chữ đấu');
-        const statusClass = status === 'Đã đấu' ? 'status-done' : 'status-pending';
-        return `<tr>
-          <td>${m.Trận}</td>
-          <td>${m['Đội 1']}</td>
-          <td>${m['Đội 2']}</td>
-          <td>${m['Tỷ số Đội 1'] || '-'}</td>
-          <td>${m['Tỷ số Đội 2'] || '-'}</td>
-          <td>${m['Đội thắng'] || '-'}</td>
-          <td>${m['Ngày đấu'] || '-'}</td>
-          <td><span class="match-status ${statusClass}">${status}</span></td>
-        </tr>`;
-      }).join('');
-    }
-
-    function updateBracket(a, b) {
-      // a[0] = hạng 1 A, a[1] = hạng 2 A, ...
-      document.getElementById('nhatA').innerText = a[0].Đội + '\n(Nhất A)';
-      document.getElementById('thu4B').innerText = b[3].Đội + '\n(Thứ 4 B)';
-      document.getElementById('thu3A').innerText = a[2].Đội + '\n(Thứ 3 A)';
-      document.getElementById('thu2B').innerText = b[1].Đội + '\n(Thứ 2 B)';
-      document.getElementById('nhatB').innerText = b[0].Đội + '\n(Nhất B)';
-      document.getElementById('thu4A').innerText = a[3].Đội + '\n(Thứ 4 A)';
-      document.getElementById('thu3B').innerText = b[2].Đội + '\n(Thứ 3 B)';
-      document.getElementById('thu2A').innerText = a[1].Đội + '\n(Thứ 2 A)';
+      await updateTable('tableA', 'chartA', 'A');
+      await updateTable('tableB', 'chartB', 'B');
+      await updateMatchTable('matchA', 'A');
+      await updateMatchTable('matchB', 'B');
     }
 
     loadData();
-    // Tự động cập nhật mỗi 30 giây
-    setInterval(loadData, 30000);
   </script>
 </body>
 </html>
