@@ -17,14 +17,16 @@
     .icon-gold { color: gold; }
     .icon-silver { color: silver; }
     .icon-bronze { color: #cd7f32; }
-    .bracket-container { margin-top: 40px; text-align: center; }
+    .bracket-container { margin-top: 40px; display: flex; justify-content: center; align-items: center; position: relative; }
+    .left-bracket, .right-bracket { width: 40%; }
+    .center-cup { text-align: center; position: absolute; top: 0; left: 45%; transform: translateX(-50%); }
+    .trophy { font-size: 3em; color: gold; margin-bottom: 10px; }
+    .final-title { font-weight: bold; color: #0d6efd; }
     .orgchart { background: transparent; }
     .orgchart .node { background-color: #e3f2fd; color: #0d6efd; border: 1px solid #0d6efd; }
     .orgchart .node .title { background-color: #0d6efd; color: white; }
-    .orgchart .node .content { background-color: #e3f2fd; color: #0d6efd; }
     .orgchart .edge { border-color: #0d6efd; }
-    .trophy { font-size: 3em; color: gold; margin: 20px 0; }
-    .sponsor { margin-top: 30px; text-align: center; color: #888; }
+    .loading { text-align: center; color: #888; font-style: italic; }
   </style>
 </head>
 <body>
@@ -61,10 +63,13 @@
 
     <h3>Sơ Đồ Đấu Loại Trực Tiếp</h3>
     <div class="bracket-container">
-      <h4 class="text-center mb-3">TỨ KẾT - BÁN KẾT - CHUNG KẾT</h4>
-      <div class="text-center trophy"><i class="fas fa-trophy"></i></div>
-      <div id="orgchart"></div>
-      <p class="sponsor mt-4">Nhà tài trợ: [Tên nhà tài trợ] | Ngày thi đấu: 15/11/2025</p>
+      <div id="left-bracket" class="left-bracket"></div>
+      <div class="center-cup">
+        <div class="trophy"><i class="fas fa-trophy"></i></div>
+        <h4 class="final-title">CHUNG KẾT</h4>
+        <p>15/11/2025</p>
+      </div>
+      <div id="right-bracket" class="right-bracket"></div>
     </div>
   </div>
 
@@ -150,37 +155,57 @@
     async function loadData() {
       const dataA = await updateTable('tableA', 'chartA', 'A');
       const dataB = await updateTable('tableB', 'chartB', 'B');
-      drawOrgChart(dataA, dataB);
+      drawLeftBracket(dataA, dataB);
+      drawRightBracket(dataA, dataB);
     }
 
-    function drawOrgChart(dataA, dataB) {
+    function drawLeftBracket(dataA, dataB) {
       const datasource = {
-        'id': 'chung-ket',
-        'name': 'CHUNG KẾT',
-        'title': '11.11.2018',
+        'name': 'BÁN KẾT 1<br>28.10.2018',
         'children': [
-          { 'id': 'ban-ket-1', 'name': 'BÁN KẾT 1', 'title': '28.10.2018', 'children': [
-            { 'id': 'nhat-a', 'name': dataA[0].team + ' (NHẤT A)' },
-            { 'id': 'thu-4-b', 'name': dataB[3].team + ' (THỨ 4 B)' }
-          ]},
-          { 'id': 'ban-ket-2', 'name': 'BÁN KẾT 2', 'title': '04.11.2018', 'children': [
-            { 'id': 'thu-3-a', 'name': dataA[2].team + ' (THỨ 3 A)' },
-            { 'id': 'thu-2-b', 'name': dataB[1].team + ' (THỨ 2 B)' }
-          ]},
-          { 'id': 'ban-ket-3', 'name': 'BÁN KẾT 3', 'title': '04.11.2018', 'children': [
-            { 'id': 'nhat-b', 'name': dataB[0].team + ' (NHẤT B)' },
-            { 'id': 'thu-4-a', 'name': dataA[3].team + ' (THỨ 4 A)' }
-          ]},
-          { 'id': 'ban-ket-4', 'name': 'BÁN KẾT 4', 'title': '28.10.2018', 'children': [
-            { 'id': 'thu-3-b', 'name': dataB[2].team + ' (THỨ 3 B)' },
-            { 'id': 'thu-2-a', 'name': dataA[1].team + ' (THỨ 2 A)' }
-          ]}
+          { 'name': dataA[0].team + '<br>(1) Nhất A' },
+          { 'name': dataB[3].team + '<br>(2) Thứ 4 B' }
         ]
       };
 
-      $('#orgchart').orgchart({
+      datasource.children.push({
+        'name': 'BÁN KẾT 2<br>04.11.2018',
+        'children': [
+          { 'name': dataA[2].team + '<br>(3) Thứ 3 A' },
+          { 'name': dataB[1].team + '<br>(4) Thứ 2 B' }
+        ]
+      });
+
+      $('#left-bracket').orgchart({
         data: datasource,
-        direction: 'l2r',  // Hướng từ trái sang phải để giống bracket
+        direction: 'r2l' ,  // Hướng từ phải sang trái cho bên trái
+        nodeTitle: 'name',
+        nodeContent: 'title',
+        pan: true,
+        zoom: true
+      });
+    }
+
+    function drawRightBracket(dataA, dataB) {
+      const datasource = {
+        'name': 'BÁN KẾT 3<br>04.11.2018',
+        'children': [
+          { 'name': dataB[0].team + '<br>(5) Nhất B' },
+          { 'name': dataA[3].team + '<br>(6) Thứ 4 A' }
+        ]
+      };
+
+      datasource.children.push({
+        'name': 'BÁN KẾT 4<br>28.10.2018',
+        'children': [
+          { 'name': dataB[2].team + '<br>(7) Thứ 3 B' },
+          { 'name': dataA[1].team + '<br>(8) Thứ 2 A' }
+        ]
+      });
+
+      $('#right-bracket').orgchart({
+        data: datasource,
+        direction: 'l2r',  // Hướng từ trái sang phải cho bên phải
         nodeTitle: 'name',
         nodeContent: 'title',
         pan: true,
