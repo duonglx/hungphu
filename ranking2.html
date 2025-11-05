@@ -31,7 +31,7 @@
       .table { font-size: 0.8rem; }
       .card-header { font-size: 1rem; }
     }
-    /* Thêm style cho filter */
+    /* Style cho filter */
     .filter-input { width: 100%; padding: 5px; font-size: 0.8rem; border: 1px solid #ced4da; border-radius: 4px; }
   </style>
   <style>
@@ -116,7 +116,7 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchA" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody> <!-- Sửa colspan từ 7 thành 6 -->
+              <tbody id="matchA" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -137,7 +137,7 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchB" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody> <!-- Sửa colspan từ 7 thành 6 -->
+              <tbody id="matchB" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -213,8 +213,21 @@
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
-      // Lưu dữ liệu gốc vào data attribute để filter sau
+
+      // Thu thập unique teams và status
+      const uniqueTeams = new Set();
+      const uniqueStatus = new Set();
+      filteredData.forEach(row => {
+        uniqueTeams.add(row.doi1);
+        uniqueTeams.add(row.doi2);
+        uniqueStatus.add(row.trangthai);
+      });
+
+      // Lưu vào dataset
       tableBody.dataset.originalRows = JSON.stringify(filteredData);
+      tableBody.dataset.uniqueTeams = JSON.stringify(Array.from(uniqueTeams));
+      tableBody.dataset.uniqueStatus = JSON.stringify(Array.from(uniqueStatus));
+
       filteredData.forEach(row => {
         tableBody.innerHTML += `
           <tr>
@@ -229,36 +242,75 @@
       });
     }
 
-    // Hàm mới: Thêm filter cho table
+    // Hàm thêm filter
     function addFilters(tableId) {
       const table = document.querySelector(`#${tableId}`).closest('table');
       const thead = table.querySelector('thead');
-      const filterRow = document.createElement('tr');
-      const headers = thead.querySelector('tr').children; // Lấy các th từ header chính
+      const tbody = table.querySelector('tbody');
+      const uniqueTeams = JSON.parse(tbody.dataset.uniqueTeams || '[]');
+      const uniqueStatus = JSON.parse(tbody.dataset.uniqueStatus || '[]');
 
-      Array.from(headers).forEach(() => {
+      const filterRow = document.createElement('tr');
+
+      // Tạo datalist cho teams (riêng cho tableId để tránh conflict)
+      const datalistId = `teamsList_${tableId}`;
+      const datalist = document.createElement('datalist');
+      datalist.id = datalistId;
+      uniqueTeams.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team;
+        datalist.appendChild(option);
+      });
+      document.body.appendChild(datalist); // Append datalist vào body để hoạt động
+
+      const headers = thead.querySelector('tr').children;
+      Array.from(headers).forEach((header, index) => {
         const th = document.createElement('th');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'filter-input';
-        input.placeholder = 'Lọc...';
-        th.appendChild(input);
+        let filterElement;
+
+        if (index === 0 || index === 1) { // Cột Đội 1 và Đội 2: autocomplete
+          filterElement = document.createElement('input');
+          filterElement.type = 'text';
+          filterElement.className = 'filter-input';
+          filterElement.placeholder = 'Lọc (autocomplete)...';
+          filterElement.setAttribute('list', datalistId);
+        } else if (index === 5) { // Cột Trạng Thái: combobox (select)
+          filterElement = document.createElement('select');
+          filterElement.className = 'filter-input';
+          const defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.text = 'Tất cả';
+          filterElement.appendChild(defaultOption);
+          uniqueStatus.forEach(status => {
+            const option = document.createElement('option');
+            option.value = status;
+            option.text = status;
+            filterElement.appendChild(option);
+          });
+        } else { // Các cột khác: input text
+          filterElement = document.createElement('input');
+          filterElement.type = 'text';
+          filterElement.className = 'filter-input';
+          filterElement.placeholder = 'Lọc...';
+        }
+
+        th.appendChild(filterElement);
         filterRow.appendChild(th);
       });
 
       thead.appendChild(filterRow);
 
       // Xử lý sự kiện filter
-      const inputs = filterRow.querySelectorAll('input');
-      inputs.forEach((input, index) => {
-        input.addEventListener('input', () => {
-          const tbody = table.querySelector('tbody');
+      const filters = filterRow.querySelectorAll('input, select');
+      filters.forEach((filterElement, index) => {
+        const eventType = filterElement.tagName === 'SELECT' ? 'change' : 'input';
+        filterElement.addEventListener(eventType, () => {
           const originalData = JSON.parse(tbody.dataset.originalRows || '[]');
-          const filters = Array.from(inputs).map(inp => inp.value.toLowerCase());
+          const filterValues = Array.from(filters).map(el => el.value.toLowerCase());
 
           const filteredRows = originalData.filter(row => {
             const rowValues = [row.doi1, row.doi2, row.tyso1, row.tyso2, row.doithang, row.trangthai].map(val => val.toLowerCase());
-            return filters.every((filter, i) => !filter || rowValues[i].includes(filter));
+            return filterValues.every((filter, i) => !filter || rowValues[i].includes(filter));
           });
 
           tbody.innerHTML = '';
@@ -283,7 +335,6 @@
       await updateTable('tableB', 'B');
       await updateMatchTable('matchA', 'A');
       await updateMatchTable('matchB', 'B');
-      // Gọi addFilters sau khi load data
       addFilters('matchA');
       addFilters('matchB');
     }
