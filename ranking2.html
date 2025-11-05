@@ -48,7 +48,7 @@
     </table>
     <div class="chart-container"><canvas id="chartB"></canvas></div>
 
-    <h3>Bảng Thông Tin Đấu - Bảng A</h3>
+    <h3>Thông Tin Đấu - Bảng A</h3>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -60,12 +60,13 @@
           <th>Tỷ số Đội 2</th>
           <th>Đội thắng</th>
           <th>Trạng Thái</th>
+          <th>Ngày đấu</th>
         </tr>
       </thead>
       <tbody id="matchA"></tbody>
     </table>
 
-    <h3>Bảng Thông Tin Đấu - Bảng B</h3>
+    <h3>Thông Tin Đấu - Bảng B</h3>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -77,6 +78,7 @@
           <th>Tỷ số Đội 2</th>
           <th>Đội thắng</th>
           <th>Trạng Thái</th>
+          <th>Ngày đấu</th>
         </tr>
       </thead>
       <tbody id="matchB"></tbody>
@@ -84,10 +86,11 @@
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL đã cung cấp
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
+    const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
 
-    async function fetchData() {
-      const response = await fetch(sheetUrl);
+    async function fetchData(url) {
+      const response = await fetch(url);
       const text = await response.text();
       const lines = text.split('\n');
       const headers = lines[0].split(',');
@@ -96,7 +99,7 @@
     }
 
     async function updateTable(tableId, chartId, table) {
-      const { headers, data } = await fetchData();
+      const { headers, data } = await fetchData(sheetUrl);
       const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
         team: row[1],
         matches: parseInt(row[2]) || 0,
@@ -136,11 +139,10 @@
       });
 
       drawChart(chartId, teams, points, goalDiff);
-      return filteredData;
     }
 
     async function updateMatchTable(tableId, table) {
-      const { headers, data } = await fetchData();
+      const { headers, data } = await fetchData(matchUrl);
       const filteredData = data.filter(row => row[0] === table && row[1] !== "").map(row => ({
         bang: row[0],
         tran: row[1],
@@ -149,7 +151,8 @@
         tyso1: row[4],
         tyso2: row[5],
         doithang: row[6],
-        trangthai: row[7] || (row[4] === "" || row[5] === "" ? "Chưa đấu" : "Đã đấu")
+        trangthai: row[7],
+        ngaydau: row[8]
       }));
 
       const tableBody = document.getElementById(tableId);
@@ -165,6 +168,7 @@
             <td>${row.tyso2}</td>
             <td>${row.doithang}</td>
             <td>${row.trangthai}</td>
+            <td>${row.ngaydau}</td>
           </tr>
         `;
       });
