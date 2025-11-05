@@ -187,15 +187,15 @@
         else if (row.rank === 4) iconClass = 'icon-blue';
         else iconClass = 'icon-gray'; // Hạng 5 và 6 cùng màu xám
         tableBody.innerHTML += `
-          <tr>
-            <td><i class="fas fa-trophy ${iconClass}" style="color: inherit !important;"></i> ${row.rank}</td>
+            <tr>
+            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>  // Xóa style="color: inherit !important;"
             <td>${row.team}</td>
             <td>${row.matches}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
-          </tr>
+            </tr>
         `;
-      });
+        });
     }
 
     async function updateMatchTable(tableId, table) {
