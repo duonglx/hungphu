@@ -10,12 +10,12 @@
   <style>
     :root {
       --shinhan-green: #28a745; --shinhan-blue: #0d6efd; --bg-light: #f8f9fa; --text-dark: #343a40;
-      --gold: gold; --silver: silver; --bronze: #cd7f32;
+      --gold: gold; --silver: silver; --bronze: #cd7f32; --blue: #0d6efd; --gray: gray;
     }
     body { background: var(--bg-light); font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 15px; }
     .header { background: var(--shinhan-blue); color: white; padding: 15px; text-align: center; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .card { border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .card { border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
     .card-header { background: var(--shinhan-green); color: white; font-weight: bold; padding: 10px 15px; text-align: center; }
     .table { font-size: 0.9rem; margin-bottom: 0; }
     .table td { transition: background 0.3s; }
@@ -49,11 +49,12 @@
                 <tr>
                   <th>Hạng</th>
                   <th>Đội</th>
+                  <th>Trận</th>
                   <th>Điểm</th>
                   <th>HS</th>
                 </tr>
               </thead>
-              <tbody id="tableA"><tr><td colspan="4" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="tableA"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
           <div class="chart-container"><canvas id="chartA"></canvas></div>
@@ -69,11 +70,12 @@
                 <tr>
                   <th>Hạng</th>
                   <th>Đội</th>
+                  <th>Trận</th>
                   <th>Điểm</th>
                   <th>HS</th>
                 </tr>
               </thead>
-              <tbody id="tableB"><tr><td colspan="4" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="tableB"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
           <div class="chart-container"><canvas id="chartB"></canvas></div>
@@ -89,13 +91,13 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Trận</th>
+                  <th>Bảng</th>
                   <th>Đội 1</th>
                   <th>Đội 2</th>
-                  <th>Tỷ số</th>
-                  <th>Thắng</th>
-                  <th>Ngày</th>
-                  <th>Trạng thái</th>
+                  <th>Tỷ số Đội 1</th>
+                  <th>Tỷ số Đội 2</th>
+                  <th>Đội thắng</th>
+                  <th>Trạng Thái</th>
                 </tr>
               </thead>
               <tbody id="matchA"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
@@ -111,13 +113,13 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Trận</th>
+                  <th>Bảng</th>
                   <th>Đội 1</th>
                   <th>Đội 2</th>
-                  <th>Tỷ số</th>
-                  <th>Thắng</th>
-                  <th>Ngày</th>
-                  <th>Trạng thái</th>
+                  <th>Tỷ số Đội 1</th>
+                  <th>Tỷ số Đội 2</th>
+                  <th>Đội thắng</th>
+                  <th>Trạng Thái</th>
                 </tr>
               </thead>
               <tbody id="matchB"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
@@ -167,9 +169,11 @@
         if (row.rank === 1) iconClass = 'icon-gold';
         else if (row.rank === 2) iconClass = 'icon-silver';
         else if (row.rank === 3) iconClass = 'icon-bronze';
+        else if (row.rank === 4) iconClass = 'icon-blue';
+        else iconClass = 'icon-gray'; // Hạng 5 và 6 cùng màu xám
         tableBody.innerHTML += `
           <tr>
-            <td><i class="fas fa-medal ${iconClass}"></i> ${row.rank}</td>
+            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
@@ -197,7 +201,6 @@
         tableBody.innerHTML += `
           <tr>
             <td>${row.bang}</td>
-            <td>${row.tran}</td>
             <td>${row.doi1}</td>
             <td>${row.doi2}</td>
             <td>${row.tyso1}</td>
