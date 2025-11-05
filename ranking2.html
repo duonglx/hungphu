@@ -187,15 +187,15 @@
         else if (row.rank === 4) iconClass = 'icon-blue';
         else iconClass = 'icon-gray'; // Hạng 5 và 6 cùng màu xám
         tableBody.innerHTML += `
-            <tr>
-            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>  // Xóa style="color: inherit !important;"
+          <tr>
+            <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
             <td>${row.matches}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
-            </tr>
+          </tr>
         `;
-        });
+      });
     }
 
     async function updateMatchTable(tableId, table) {
@@ -214,18 +214,21 @@
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
 
-      // Thu thập unique teams và status
+      // Thu thập unique teams, winners và status
       const uniqueTeams = new Set();
+      const uniqueWinners = new Set();
       const uniqueStatus = new Set();
       filteredData.forEach(row => {
         uniqueTeams.add(row.doi1);
         uniqueTeams.add(row.doi2);
+        uniqueWinners.add(row.doithang);
         uniqueStatus.add(row.trangthai);
       });
 
       // Lưu vào dataset
       tableBody.dataset.originalRows = JSON.stringify(filteredData);
       tableBody.dataset.uniqueTeams = JSON.stringify(Array.from(uniqueTeams));
+      tableBody.dataset.uniqueWinners = JSON.stringify(Array.from(uniqueWinners));
       tableBody.dataset.uniqueStatus = JSON.stringify(Array.from(uniqueStatus));
 
       filteredData.forEach(row => {
@@ -248,20 +251,32 @@
       const thead = table.querySelector('thead');
       const tbody = table.querySelector('tbody');
       const uniqueTeams = JSON.parse(tbody.dataset.uniqueTeams || '[]');
+      const uniqueWinners = JSON.parse(tbody.dataset.uniqueWinners || '[]');
       const uniqueStatus = JSON.parse(tbody.dataset.uniqueStatus || '[]');
 
       const filterRow = document.createElement('tr');
 
-      // Tạo datalist cho teams (riêng cho tableId để tránh conflict)
-      const datalistId = `teamsList_${tableId}`;
-      const datalist = document.createElement('datalist');
-      datalist.id = datalistId;
+      // Tạo datalist cho teams (riêng cho tableId)
+      const teamsDatalistId = `teamsList_${tableId}`;
+      const teamsDatalist = document.createElement('datalist');
+      teamsDatalist.id = teamsDatalistId;
       uniqueTeams.forEach(team => {
         const option = document.createElement('option');
         option.value = team;
-        datalist.appendChild(option);
+        teamsDatalist.appendChild(option);
       });
-      document.body.appendChild(datalist); // Append datalist vào body để hoạt động
+      document.body.appendChild(teamsDatalist);
+
+      // Tạo datalist cho winners (riêng cho tableId)
+      const winnersDatalistId = `winnersList_${tableId}`;
+      const winnersDatalist = document.createElement('datalist');
+      winnersDatalist.id = winnersDatalistId;
+      uniqueWinners.forEach(winner => {
+        const option = document.createElement('option');
+        option.value = winner;
+        winnersDatalist.appendChild(option);
+      });
+      document.body.appendChild(winnersDatalist);
 
       const headers = thead.querySelector('tr').children;
       Array.from(headers).forEach((header, index) => {
@@ -273,7 +288,13 @@
           filterElement.type = 'text';
           filterElement.className = 'filter-input';
           filterElement.placeholder = 'Lọc (autocomplete)...';
-          filterElement.setAttribute('list', datalistId);
+          filterElement.setAttribute('list', teamsDatalistId);
+        } else if (index === 4) { // Cột Đội thắng: autocomplete mới
+          filterElement = document.createElement('input');
+          filterElement.type = 'text';
+          filterElement.className = 'filter-input';
+          filterElement.placeholder = 'Lọc (autocomplete)...';
+          filterElement.setAttribute('list', winnersDatalistId);
         } else if (index === 5) { // Cột Trạng Thái: combobox (select)
           filterElement = document.createElement('select');
           filterElement.className = 'filter-input';
@@ -287,26 +308,33 @@
             option.text = status;
             filterElement.appendChild(option);
           });
-        } else { // Các cột khác: input text
-          filterElement = document.createElement('input');
-          filterElement.type = 'text';
-          filterElement.className = 'filter-input';
-          filterElement.placeholder = 'Lọc...';
+        } else { // Các cột khác (bao gồm Tỷ số Đội 1/2): không tạo filter
+          // Để rỗng để bỏ lọc
         }
 
-        th.appendChild(filterElement);
+        if (filterElement) {
+          th.appendChild(filterElement);
+        }
         filterRow.appendChild(th);
       });
 
       thead.appendChild(filterRow);
 
-      // Xử lý sự kiện filter
+      // Xử lý sự kiện filter (vẫn lọc dựa trên tất cả filter values, nhưng index 2/3 sẽ luôn empty)
       const filters = filterRow.querySelectorAll('input, select');
       filters.forEach((filterElement, index) => {
         const eventType = filterElement.tagName === 'SELECT' ? 'change' : 'input';
         filterElement.addEventListener(eventType, () => {
           const originalData = JSON.parse(tbody.dataset.originalRows || '[]');
-          const filterValues = Array.from(filters).map(el => el.value.toLowerCase());
+          const filterValues = Array.from(headers).map((_, i) => {
+            // Map filter values theo index gốc, index 2/3 luôn ''
+            if (i === 2 || i === 3) return '';
+            // Tính index thực của filters (vì filters chỉ có cho các cột có element)
+            let filterIndex = i;
+            if (i > 1) filterIndex -= 2; // Bù trừ vì bỏ 2 cột
+            if (i > 3 && i < 5) filterIndex += 2; // Điều chỉnh cho Đội thắng và Trạng Thái
+            return filters[filterIndex]?.value.toLowerCase() || '';
+          });
 
           const filteredRows = originalData.filter(row => {
             const rowValues = [row.doi1, row.doi2, row.tyso1, row.tyso2, row.doithang, row.trangthai].map(val => val.toLowerCase());
