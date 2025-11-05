@@ -31,6 +31,8 @@
       .table { font-size: 0.8rem; }
       .card-header { font-size: 1rem; }
     }
+    /* Thêm style cho filter */
+    .filter-input { width: 100%; padding: 5px; font-size: 0.8rem; border: 1px solid #ced4da; border-radius: 4px; }
   </style>
   <style>
   body { padding: 20px; background: #f8f9fa; }
@@ -74,7 +76,6 @@
               <tbody id="tableA"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
-         
         </div>
       </div>
 
@@ -95,7 +96,6 @@
               <tbody id="tableB"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
-          
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchA"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="matchA" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody> <!-- Sửa colspan từ 7 thành 6 -->
             </table>
           </div>
         </div>
@@ -137,7 +137,7 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchB"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="matchB" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody> <!-- Sửa colspan từ 7 thành 6 -->
             </table>
           </div>
         </div>
@@ -213,6 +213,8 @@
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
+      // Lưu dữ liệu gốc vào data attribute để filter sau
+      tableBody.dataset.originalRows = JSON.stringify(filteredData);
       filteredData.forEach(row => {
         tableBody.innerHTML += `
           <tr>
@@ -227,26 +229,52 @@
       });
     }
 
-    function drawChart(chartId, teams, points, goalDiff) {
-      const ctx = document.getElementById(chartId).getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: teams,
-          datasets: [{
-            label: 'Điểm',
-            data: points,
-            backgroundColor: '#28a745'
-          }, {
-            label: 'Hiệu số',
-            data: goalDiff,
-            backgroundColor: '#ffc107'
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: { y: { beginAtZero: true } }
-        }
+    // Hàm mới: Thêm filter cho table
+    function addFilters(tableId) {
+      const table = document.querySelector(`#${tableId}`).closest('table');
+      const thead = table.querySelector('thead');
+      const filterRow = document.createElement('tr');
+      const headers = thead.querySelector('tr').children; // Lấy các th từ header chính
+
+      Array.from(headers).forEach(() => {
+        const th = document.createElement('th');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'filter-input';
+        input.placeholder = 'Lọc...';
+        th.appendChild(input);
+        filterRow.appendChild(th);
+      });
+
+      thead.appendChild(filterRow);
+
+      // Xử lý sự kiện filter
+      const inputs = filterRow.querySelectorAll('input');
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+          const tbody = table.querySelector('tbody');
+          const originalData = JSON.parse(tbody.dataset.originalRows || '[]');
+          const filters = Array.from(inputs).map(inp => inp.value.toLowerCase());
+
+          const filteredRows = originalData.filter(row => {
+            const rowValues = [row.doi1, row.doi2, row.tyso1, row.tyso2, row.doithang, row.trangthai].map(val => val.toLowerCase());
+            return filters.every((filter, i) => !filter || rowValues[i].includes(filter));
+          });
+
+          tbody.innerHTML = '';
+          filteredRows.forEach(row => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${row.doi1}</td>
+                <td>${row.doi2}</td>
+                <td>${row.tyso1}</td>
+                <td>${row.tyso2}</td>
+                <td>${row.doithang}</td>
+                <td>${row.trangthai}</td>
+              </tr>
+            `;
+          });
+        });
       });
     }
 
@@ -255,6 +283,9 @@
       await updateTable('tableB', 'B');
       await updateMatchTable('matchA', 'A');
       await updateMatchTable('matchB', 'B');
+      // Gọi addFilters sau khi load data
+      addFilters('matchA');
+      addFilters('matchB');
     }
 
     loadData();
