@@ -91,7 +91,6 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Bảng</th>
                   <th>Đội 1</th>
                   <th>Đội 2</th>
                   <th>Tỷ số Đội 1</th>
@@ -113,7 +112,6 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Bảng</th>
                   <th>Đội 1</th>
                   <th>Đội 2</th>
                   <th>Tỷ số Đội 1</th>
@@ -175,6 +173,7 @@
           <tr>
             <td><i class="fas fa-trophy ${iconClass}"></i> ${row.rank}</td>
             <td>${row.team}</td>
+            <td>${row.matches}</td>
             <td>${row.points}</td>
             <td>${row.goalDiff}</td>
           </tr>
@@ -200,7 +199,6 @@
       filteredData.forEach(row => {
         tableBody.innerHTML += `
           <tr>
-            <td>${row.bang}</td>
             <td>${row.doi1}</td>
             <td>${row.doi2}</td>
             <td>${row.tyso1}</td>
