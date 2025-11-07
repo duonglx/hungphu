@@ -36,6 +36,7 @@
     /* Style cho quarter final blocks */
     .round-block { border: 1px solid var(--shinhan-blue); border-radius: 10px; padding: 15px; margin-bottom: 20px; background: white; }
     .animate-pulse { animation: pulse 2s infinite; }
+    .match-card { box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;}
   </style>
   <style>
   body { padding: 20px; background: #f8f9fa; }
@@ -286,9 +287,9 @@
           const trophyIcon = round.includes('Chung Kết') ? '<i class="fas fa-trophy text-warning me-2 animate-pulse"></i>' : '';
 
           const card = `
-            <div class="card shadow-sm" style="width: 100%; max-width: 350px;">
+            <div class="card match-card" style="width: 100%; max-width: 350px;">
               <div class="card-body text-center">
-                <h6>${trophyIcon}${match.tran}</h6>
+                <h6 class="fw-bold">${trophyIcon}${match.tran}</h6>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>${match.doi1}</span>
                   <i class="fas fa-arrows-left-right mx-2 text-primary animate-pulse"></i>
