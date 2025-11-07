@@ -289,7 +289,10 @@
           const card = `
             <div class="card match-card" style="width: 100%; max-width: 350px;">
               <div class="card-body text-center">
-                <h6 class="fw-bold">${trophyIcon}${match.tran}</h6>
+                <div>
+                    <h6 class="fw-bold">${trophyIcon}${match.tran}</h6>
+                    <div class="mb-2" style="color:red">${iconDate}</div>
+                </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>${match.doi1}</span>
                   <i class="fas fa-arrows-left-right mx-2 text-primary animate-pulse"></i>
@@ -297,7 +300,7 @@
                 </div>
                 <p class="mt-2 mb-1"><small>Tỷ số: ${match.tyso1} / ${match.tyso2}</small></p>
                 <p class="mt-1 mb-1"><small>Đội thắng: ${match.doithang}</small></p>
-                <p class="mt-1">${iconStatus}${match.trangthai} ${iconDate}</p>
+                <p class="mt-1">${iconStatus}${match.trangthai}</p>
               </div>
             </div>
           `;
