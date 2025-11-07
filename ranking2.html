@@ -33,6 +33,20 @@
     }
     /* Style cho filter */
     .filter-input { width: 100%; padding: 5px; font-size: 0.8rem; border: 1px solid #ced4da; border-radius: 4px; }
+    /* CSS cho bracket (tùy chỉnh từ Flexbox example) */
+    .bracket-container { padding: 20px; background: #f8f9fa; }
+    .bracket { display: flex; flex-direction: row; position: relative; justify-content: center; align-items: center; min-height: 300px; }
+    .bracket-column { display: flex; flex-direction: column; justify-content: space-around; align-items: center; margin: 0 20px; }
+    .bracket-match { position: relative; display: flex; flex-direction: column; min-width: 150px; height: auto; margin: 10px 0; border: 1px solid var(--shinhan-blue); border-radius: 5px; background: white; padding: 5px; text-align: center; }
+    .bracket-team { padding: 5px; border-bottom: 1px solid #ddd; }
+    .bracket-team:last-child { border-bottom: none; }
+    .bracket-winner { background: var(--shinhan-green); color: white; }
+    .bracket-lines { position: absolute; top: 50%; right: -20px; width: 20px; height: 100%; }
+    .bracket-lines .line { background: var(--shinhan-blue); position: absolute; }
+    .bracket-lines .line.one { height: 1px; width: 20px; top: 0; }
+    .bracket-lines .line.two { width: 1px; height: 50%; top: 0; right: 0; }
+    /* Thêm responsive cho bracket */
+    @media (max-width: 768px) { .bracket { flex-direction: column; } .bracket-column { margin: 10px 0; } }
   </style>
   <style>
   body { padding: 20px; background: #f8f9fa; }
@@ -143,9 +157,75 @@
         </div>
       </div>
     </div>
+
+    <!-- Phần mới: Sơ đồ vòng loại (bracket) -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-sitemap me-2"></i> Sơ Đồ Vòng Loại</div>
+          <div class="bracket-container">
+            <div class="bracket">
+              <!-- Cột 1: Tứ kết bên trái -->
+              <div class="bracket-column">
+                <div class="bracket-match">
+                  <div class="bracket-team">(1) Hạng Nhất A</div>
+                  <div class="bracket-team">(2) Hạng 4 B</div>
+                </div>
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">(9) Bán Kết 1 Đội 1</div>
+                </div>
+                <div class="bracket-match">
+                  <div class="bracket-team">(3) Hạng 3 A</div>
+                  <div class="bracket-team">(4) Hạng 2 B</div>
+                </div>
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">(10) Bán Kết 1 Đội 2</div>
+                </div>
+              </div>
+              <!-- Cột 2: Bán kết -->
+              <div class="bracket-column">
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">Thắng Bán kết 1</div>
+                </div>
+              </div>
+              <!-- Cột 3: Chung kết -->
+              <div class="bracket-column">
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">Chung Kết</div>
+                </div>
+              </div>
+              <!-- Cột 4: Bán kết bên phải -->
+              <div class="bracket-column">
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">Thắng Bán kết 2</div>
+                </div>
+              </div>
+              <!-- Cột 5: Tứ kết bên phải -->
+              <div class="bracket-column">
+                <div class="bracket-match">
+                  <div class="bracket-team">(5) Hạng Nhất B</div>
+                  <div class="bracket-team">(6) Hạng 4 A</div>
+                </div>
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">(11) Bán Kết 2 Đội 1</div>
+                </div>
+                <div class="bracket-match">
+                  <div class="bracket-team">(7) Hạng 3 B</div>
+                  <div class="bracket-team">(8) Hạng 2 A</div>
+                </div>
+                <div class="bracket-match bracket-winner">
+                  <div class="bracket-team">(12) Bán Kết 2 Đội 2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
+    // JS giữ nguyên như trước, chỉ thêm nếu cần dynamic bracket sau
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
     const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
 
@@ -320,20 +400,16 @@
 
       thead.appendChild(filterRow);
 
-      // Xử lý sự kiện filter (vẫn lọc dựa trên tất cả filter values, nhưng index 2/3 sẽ luôn empty)
+      // Xử lý sự kiện filter (vẫn lọc dựa trên tất cả filter values, nhưng index 2/3 luôn empty)
       const filters = filterRow.querySelectorAll('input, select');
-      filters.forEach((filterElement, index) => {
+      filters.forEach((filterElement) => {
         const eventType = filterElement.tagName === 'SELECT' ? 'change' : 'input';
         filterElement.addEventListener(eventType, () => {
           const originalData = JSON.parse(tbody.dataset.originalRows || '[]');
-          const filterValues = Array.from(headers).map((_, i) => {
-            // Map filter values theo index gốc, index 2/3 luôn ''
-            if (i === 2 || i === 3) return '';
-            // Tính index thực của filters (vì filters chỉ có cho các cột có element)
-            let filterIndex = i;
-            if (i > 1) filterIndex -= 2; // Bù trừ vì bỏ 2 cột
-            if (i > 3 && i < 5) filterIndex += 2; // Điều chỉnh cho Đội thắng và Trạng Thái
-            return filters[filterIndex]?.value.toLowerCase() || '';
+          const filterValues = Array(6).fill(''); // Khởi tạo array 6 phần tử rỗng
+          let filterIndex = 0;
+          [0,1,4,5].forEach(i => { // Chỉ set cho cột có filter
+            filterValues[i] = filters[filterIndex++]?.value.toLowerCase() || '';
           });
 
           const filteredRows = originalData.filter(row => {
