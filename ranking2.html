@@ -33,20 +33,9 @@
     }
     /* Style cho filter */
     .filter-input { width: 100%; padding: 5px; font-size: 0.8rem; border: 1px solid #ced4da; border-radius: 4px; }
-    /* CSS cho bracket (tùy chỉnh từ Flexbox example) */
-    .bracket-container { padding: 20px; background: #f8f9fa; }
-    .bracket { display: flex; flex-direction: row; position: relative; justify-content: center; align-items: center; min-height: 300px; }
-    .bracket-column { display: flex; flex-direction: column; justify-content: space-around; align-items: center; margin: 0 20px; }
-    .bracket-match { position: relative; display: flex; flex-direction: column; min-width: 150px; height: auto; margin: 10px 0; border: 1px solid var(--shinhan-blue); border-radius: 5px; background: white; padding: 5px; text-align: center; }
-    .bracket-team { padding: 5px; border-bottom: 1px solid #ddd; }
-    .bracket-team:last-child { border-bottom: none; }
-    .bracket-winner { background: var(--shinhan-green); color: white; }
-    .bracket-lines { position: absolute; top: 50%; right: -20px; width: 20px; height: 100%; }
-    .bracket-lines .line { background: var(--shinhan-blue); position: absolute; }
-    .bracket-lines .line.one { height: 1px; width: 20px; top: 0; }
-    .bracket-lines .line.two { width: 1px; height: 50%; top: 0; right: 0; }
-    /* Thêm responsive cho bracket */
-    @media (max-width: 768px) { .bracket { flex-direction: column; } .bracket-column { margin: 10px 0; } }
+    /* Style cho quarter final blocks */
+    .round-block { border: 1px solid var(--shinhan-blue); border-radius: 10px; padding: 15px; margin-bottom: 20px; background: white; }
+    .animate-pulse { animation: pulse 2s infinite; }
   </style>
   <style>
   body { padding: 20px; background: #f8f9fa; }
@@ -90,6 +79,7 @@
               <tbody id="tableA"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
+          
         </div>
       </div>
 
@@ -110,6 +100,7 @@
               <tbody id="tableB"><tr><td colspan="5" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
+          
         </div>
       </div>
     </div>
@@ -130,7 +121,7 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchA" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="matchA"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -151,73 +142,20 @@
                   <th>Trạng Thái</th>
                 </tr>
               </thead>
-              <tbody id="matchB" class="filterable"><tr><td colspan="6" class="loading">Đang tải...</td></tr></tbody>
+              <tbody id="matchB"><tr><td colspan="7" class="loading">Đang tải...</td></tr></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Phần mới: Sơ đồ vòng loại (bracket) -->
+    <!-- Phần mới: Vòng Tứ Kết (dynamic từ CSV, nhóm ROUND) -->
     <div class="row g-4 mt-4">
       <div class="col-12">
         <div class="card">
-          <div class="card-header"><i class="fas fa-sitemap me-2"></i> Sơ Đồ Vòng Loại</div>
-          <div class="bracket-container">
-            <div class="bracket">
-              <!-- Cột 1: Tứ kết bên trái -->
-              <div class="bracket-column">
-                <div class="bracket-match">
-                  <div class="bracket-team">(1) Hạng Nhất A</div>
-                  <div class="bracket-team">(2) Hạng 4 B</div>
-                </div>
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">(9) Bán Kết 1 Đội 1</div>
-                </div>
-                <div class="bracket-match">
-                  <div class="bracket-team">(3) Hạng 3 A</div>
-                  <div class="bracket-team">(4) Hạng 2 B</div>
-                </div>
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">(10) Bán Kết 1 Đội 2</div>
-                </div>
-              </div>
-              <!-- Cột 2: Bán kết -->
-              <div class="bracket-column">
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">Thắng Bán kết 1</div>
-                </div>
-              </div>
-              <!-- Cột 3: Chung kết -->
-              <div class="bracket-column">
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">Chung Kết</div>
-                </div>
-              </div>
-              <!-- Cột 4: Bán kết bên phải -->
-              <div class="bracket-column">
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">Thắng Bán kết 2</div>
-                </div>
-              </div>
-              <!-- Cột 5: Tứ kết bên phải -->
-              <div class="bracket-column">
-                <div class="bracket-match">
-                  <div class="bracket-team">(5) Hạng Nhất B</div>
-                  <div class="bracket-team">(6) Hạng 4 A</div>
-                </div>
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">(11) Bán Kết 2 Đội 1</div>
-                </div>
-                <div class="bracket-match">
-                  <div class="bracket-team">(7) Hạng 3 B</div>
-                  <div class="bracket-team">(8) Hạng 2 A</div>
-                </div>
-                <div class="bracket-match bracket-winner">
-                  <div class="bracket-team">(12) Bán Kết 2 Đội 2</div>
-                </div>
-              </div>
-            </div>
+          <div class="card-header"><i class="fas fa-trophy me-2"></i> Vòng Tứ Kết & Các Vòng Sau</div>
+          <div class="card-body p-3" id="quarterFinalContainer">
+            <div class="loading text-center">Đang tải dữ liệu...</div>
           </div>
         </div>
       </div>
@@ -225,9 +163,9 @@
   </div>
 
   <script>
-    // JS giữ nguyên như trước, chỉ thêm nếu cần dynamic bracket sau
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1305415601&single=true&output=csv'; // URL cho xếp hạng
     const matchUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=1569100184&single=true&output=csv'; // URL cho vòng loại
+    const quarterFinalUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR93AGPK4vMw6gkl3t-sGEszF1HNNn7ENFl7mUcQWls7AjsKM6d1Z_ZeQWK8gN3wfYMZRpwqRJRN53N/pub?gid=88266987&single=true&output=csv'; // URL cho Tứ Kết
 
     async function fetchData(url) {
       const response = await fetch(url);
@@ -293,24 +231,7 @@
 
       const tableBody = document.getElementById(tableId);
       tableBody.innerHTML = '';
-
-      // Thu thập unique teams, winners và status
-      const uniqueTeams = new Set();
-      const uniqueWinners = new Set();
-      const uniqueStatus = new Set();
-      filteredData.forEach(row => {
-        uniqueTeams.add(row.doi1);
-        uniqueTeams.add(row.doi2);
-        uniqueWinners.add(row.doithang);
-        uniqueStatus.add(row.trangthai);
-      });
-
-      // Lưu vào dataset
       tableBody.dataset.originalRows = JSON.stringify(filteredData);
-      tableBody.dataset.uniqueTeams = JSON.stringify(Array.from(uniqueTeams));
-      tableBody.dataset.uniqueWinners = JSON.stringify(Array.from(uniqueWinners));
-      tableBody.dataset.uniqueStatus = JSON.stringify(Array.from(uniqueStatus));
-
       filteredData.forEach(row => {
         tableBody.innerHTML += `
           <tr>
@@ -325,7 +246,67 @@
       });
     }
 
-    // Hàm thêm filter
+    // Hàm mới: Update Vòng Tứ Kết từ CSV
+    async function updateQuarterFinals() {
+      const { headers, data } = await fetchData(quarterFinalUrl);
+      const rounds = data.reduce((acc, row) => {
+        const round = row[0].trim(); // Cột ROUND
+        if (round && row[1] !== "") { // Bỏ rows trống
+          if (!acc[round]) acc[round] = [];
+          acc[round].push({
+            tran: row[1],
+            doi1: row[2] || '-',
+            doi2: row[3] || '-',
+            tyso1: row[4] || '-',
+            tyso2: row[5] || '-',
+            doithang: row[6] || '-',
+            doithua: row[7] || '-',
+            trangthai: row[8] || 'Chưa đấu',
+            ngaydau: row[9] || '-'
+          });
+        }
+        return acc;
+      }, {});
+
+      const container = document.getElementById('quarterFinalContainer');
+      container.innerHTML = ''; // Xóa loading
+
+      // Render từng ROUND thành khối riêng
+      Object.keys(rounds).forEach(round => {
+        const roundBlock = document.createElement('div');
+        roundBlock.className = 'round-block mb-4';
+        roundBlock.innerHTML = `<h5 class="text-center mb-3" style="color: var(--shinhan-green);"><i class="fas fa-layer-group me-2"></i>${round}</h5>`;
+        const matchesDiv = document.createElement('div');
+        matchesDiv.className = 'd-flex flex-column flex-md-row justify-content-center gap-3'; // Dọc mobile, ngang desktop
+
+        rounds[round].forEach(match => {
+          const iconStatus = match.trangthai === 'Đã đấu' ? '<i class="fas fa-check-circle text-success me-1 animate-pulse"></i>' : '<i class="fas fa-hourglass-start text-warning me-1 animate-pulse"></i>';
+          const iconDate = match.ngaydau !== '-' ? `<small><i class="fas fa-calendar-alt me-1"></i>${match.ngaydau}</small>` : '';
+          const trophyIcon = round.includes('Chung Kết') ? '<i class="fas fa-trophy text-warning me-2 animate-pulse"></i>' : '';
+
+          const card = `
+            <div class="card shadow-sm" style="width: 100%; max-width: 350px;">
+              <div class="card-body text-center">
+                <h6>${trophyIcon}${match.tran}</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>${match.doi1}</span>
+                  <i class="fas fa-arrows-left-right mx-2 text-primary animate-pulse"></i>
+                  <span>${match.doi2}</span>
+                </div>
+                <p class="mt-2 mb-1"><small>Tỷ số: ${match.tyso1} / ${match.tyso2}</small></p>
+                <p class="mt-1 mb-1"><small>Đội thắng: ${match.doithang} | Đội thua: ${match.doithua}</small></p>
+                <p class="mt-1">${iconStatus}${match.trangthai} ${iconDate}</p>
+              </div>
+            </div>
+          `;
+          matchesDiv.innerHTML += card;
+        });
+
+        roundBlock.appendChild(matchesDiv);
+        container.appendChild(roundBlock);
+      });
+    }
+
     function addFilters(tableId) {
       const table = document.querySelector(`#${tableId}`).closest('table');
       const thead = table.querySelector('thead');
@@ -400,7 +381,7 @@
 
       thead.appendChild(filterRow);
 
-      // Xử lý sự kiện filter (vẫn lọc dựa trên tất cả filter values, nhưng index 2/3 luôn empty)
+      // Xử lý sự kiện filter
       const filters = filterRow.querySelectorAll('input, select');
       filters.forEach((filterElement) => {
         const eventType = filterElement.tagName === 'SELECT' ? 'change' : 'input';
@@ -441,6 +422,7 @@
       await updateMatchTable('matchB', 'B');
       addFilters('matchA');
       addFilters('matchB');
+      await updateQuarterFinals();
     }
 
     loadData();
