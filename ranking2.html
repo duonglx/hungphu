@@ -36,6 +36,20 @@
     /* Style cho quarter final blocks */
     .round-block { border: 1px solid var(--shinhan-blue); border-radius: 10px; padding: 15px; margin-bottom: 20px; background: white; }
     .animate-pulse { animation: pulse 2s infinite; }
+    /* Style mới cho team glass card */
+    .team-glass-card { 
+      background: rgba(255, 255, 255, 0.8); 
+      backdrop-filter: blur(10px); 
+      border: 1px solid rgba(0, 0, 0, 0.1); 
+      border-radius: 8px; 
+      padding: 8px 12px; 
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+      text-align: center; 
+      flex: 1; /* Cân đối hai bên */
+    }
+    @media (max-width: 768px) {
+      .team-glass-card { margin-bottom: 10px; } /* Stack dọc trên mobile */
+    }
   </style>
   <style>
   body { padding: 20px; background: #f8f9fa; }
@@ -105,18 +119,6 @@
       </div>
     </div>
 
-    <!-- Phần mới: Vòng Tứ Kết (dynamic từ CSV, nhóm ROUND) -->
-    <div class="row g-4 mt-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header"><i class="fas fa-trophy me-2"></i> Vòng Tứ Kết & Chung Kết</div>
-          <div class="card-body p-3" id="quarterFinalContainer">
-            <div class="loading text-center">Đang tải dữ liệu...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="row g-4 mt-4">
       <div class="col-12 col-md-6">
         <div class="card">
@@ -160,7 +162,19 @@
         </div>
       </div>
     </div>
-    
+
+    <!-- Phần mới: Vòng Tứ Kết (dynamic từ CSV, nhóm ROUND) -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-trophy me-2"></i> Vòng Tứ Kết & Các Vòng Sau</div>
+          <div class="card-body p-3" id="quarterFinalContainer">
+            <div class="loading text-center">Đang tải dữ liệu...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -288,14 +302,14 @@
           const card = `
             <div class="card shadow-sm" style="width: 100%; max-width: 350px;">
               <div class="card-body text-center">
-                <h6>${trophyIcon}${match.tran}</h6>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>${match.doi1}</span>
+                <h6 class="fw-bold">${trophyIcon}${match.tran}</h6>
+                <div class="d-flex justify-content-between align-items-center flex-column flex-md-row gap-2">
+                  <div class="team-glass-card">${match.doi1}</div>
                   <i class="fas fa-arrows-left-right mx-2 text-primary animate-pulse"></i>
-                  <span>${match.doi2}</span>
+                  <div class="team-glass-card">${match.doi2}</div>
                 </div>
                 <p class="mt-2 mb-1"><small>Tỷ số: ${match.tyso1} / ${match.tyso2}</small></p>
-                <p class="mt-1 mb-1"><small>Đội thắng: ${match.doithang}</small></p>
+                <p class="mt-1 mb-1"><small>Đội thắng: ${match.doithang} | Đội thua: ${match.doithua}</small></p>
                 <p class="mt-1">${iconStatus}${match.trangthai} ${iconDate}</p>
               </div>
             </div>
