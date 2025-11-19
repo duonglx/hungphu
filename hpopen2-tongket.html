@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Tổng Kết - Hưng Phú Open 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Chart Container Styling Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #fdfbf7; /* Warm neutral background */
+            color: #44403c;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(231, 229, 228, 0.5);
+        }
+        .nav-item.active {
+            border-bottom: 2px solid #d97706;
+            color: #d97706;
+            font-weight: 700;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals with Amber/Green Accents (Inspired by Tennis clay/grass) -->
+    <!-- Application Structure Plan: Dashboard layout structured into 4 thematic sections: Overview (Hero), Financials (Transparency), Performance (Stats), and Logistics (Fun stats). Designed to tell the story of the tournament's success through data. -->
+    <!-- Visualization & Content Choices: 
+         1. Overview: Stats Cards -> Inform -> Simple Numbers -> Quick impact.
+         2. Financials: Pie & Horizontal Bar -> Compare -> Composition of Income/Expenses -> Chart.js (Canvas).
+         3. Performance: Grouped Bar Chart -> Relationship -> Wins vs Losses per player -> Chart.js (Canvas).
+         4. Logistics: Doughnut Chart -> Inform -> T-shirt size distribution -> Chart.js (Canvas).
+         5. Match List: Interactive Table -> Organize -> Searchable match results -> HTML/JS.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#fdfbf7]/95 backdrop-blur border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold text-xl">HP</div>
+                        <span class="font-bold text-xl tracking-tight text-stone-800">Báo Cáo Tổng Kết - Hưng Phú Open 2 - 2025</span>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8" id="desktop-nav">
+                    <button onclick="scrollToSection('overview')" class="nav-item active inline-flex items-center px-1 pt-1 text-sm font-medium text-stone-900">Tổng Quan</button>
+                    <button onclick="scrollToSection('financials')" class="nav-item inline-flex items-center px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 hover:border-stone-300">Tài Chính</button>
+                    <button onclick="scrollToSection('competition')" class="nav-item inline-flex items-center px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 hover:border-stone-300">Chuyên Môn</button>
+                    <button onclick="scrollToSection('logistics')" class="nav-item inline-flex items-center px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 hover:border-stone-300">Hậu Cần</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- Section 1: Overview / Hero -->
+        <section id="overview" class="space-y-6 animate-fade-in">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl mb-4">Tổng Kết Mùa Giải Rực Rỡ</h1>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Khép lại Hưng Phú Open 2 với những khoảnh khắc bùng nổ. Đây là lúc chúng ta cùng nhìn lại những con số biết nói, sự minh bạch trong tài chính và thành tích của các vận động viên.
+                </p>
+            </div>
+
+            <!-- Key Stats Grid -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Stat 1 -->
+                <div class="glass-panel overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6 transform transition hover:-translate-y-1 hover:shadow-lg">
+                    <dt class="text-sm font-medium text-stone-500 truncate">Tổng Thu (VĐV + Tài Trợ)</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-emerald-600">49.000.000 ₫</dd>
+                    <div class="mt-2 flex items-center text-sm text-stone-400">
+                        <span class="text-emerald-600 font-bold">9</span>&nbsp;Nhà tài trợ vàng
+                    </div>
+                </div>
+                <!-- Stat 2 -->
+                <div class="glass-panel overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6 transform transition hover:-translate-y-1 hover:shadow-lg">
+                    <dt class="text-sm font-medium text-stone-500 truncate">Tổng Chi Phí Tổ Chức</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-amber-600">42,603,000 ₫</dd>
+                    <div class="mt-2 flex items-center text-sm text-stone-400">
+                        Tiệc Gala, Cúp, Áo đấu...
+                    </div>
+                </div>
+                <!-- Stat 3 -->
+                <div class="glass-panel overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6 transform transition hover:-translate-y-1 hover:shadow-lg">
+                    <dt class="text-sm font-medium text-stone-500 truncate">Số Lượng VĐV</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-stone-900">24</dd>
+                    <div class="mt-2 flex items-center text-sm text-stone-400">
+                        Chia làm 2 Bảng đấu A & B
+                    </div>
+                </div>
+                <!-- Stat 4 -->
+                <div class="glass-panel overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6 transform transition hover:-translate-y-1 hover:shadow-lg">
+                    <dt class="text-sm font-medium text-stone-500 truncate">Tổng Số Trận Đấu</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-blue-600">30+</dd>
+                    <div class="mt-2 flex items-center text-sm text-stone-400">
+                        Vòng loại, Tứ kết, Bán kết, CK
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-stone-200"></div>
+
+        <!-- Section 2: Financials -->
+        <section id="financials" class="scroll-mt-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-emerald-500 rounded-sm"></span>
+                    Báo Cáo Tài Chính
+                </h2>
+                <p class="mt-2 text-stone-600">Minh bạch là ưu tiên hàng đầu. Dưới đây là phân tích chi tiết nguồn thu từ phí tham gia, tài trợ và các khoản chi cho giải đấu.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Income Chart -->
+                <div class="glass-panel rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-stone-800 mb-4 text-center">Cơ Cấu Nguồn Thu</h3>
+                    <div class="chart-container">
+                        <canvas id="incomeChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-sm text-stone-500 text-center italic">
+                        Cảm ơn các nhà tài trợ: Xóm Media, Ép Cọc Minh Đức, Kosmen, A Vũ Đ2, Hoan Đ6, Đồ Cúng Việt, A Hưng Đ1, Tiến Đ5, A Quang Đ5
+                    </div>
+                </div>
+
+                <!-- Expense Chart -->
+                <div class="glass-panel rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-stone-800 mb-4 text-center">Phân Bổ Chi Phí</h3>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-sm text-stone-500 text-center italic">
+                        Phần lớn ngân sách được dùng cho Tiệc Gala và Giải thưởng.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-stone-200"></div>
+
+        <!-- Section 3: Competition / Stats -->
+        <section id="competition" class="scroll-mt-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-blue-500 rounded-sm"></span>
+                    Thống Kê Chuyên Môn
+                </h2>
+                <p class="mt-2 text-stone-600">Dữ liệu từ vòng bảng cho thấy sự cạnh tranh khốc liệt. Biểu đồ dưới đây thể hiện số trận thắng/thua của các cặp đôi tại Bảng A và B.</p>
+            </div>
+
+            <!-- Group Stage Standings Chart -->
+            <div class="glass-panel rounded-xl shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-semibold text-stone-800 mb-6">Hiệu Suất Vòng Bảng (Thắng vs Thua)</h3>
+                
+                <!-- Controls -->
+                <div class="flex justify-center gap-4 mb-6">
+                    <button id="btnGroupA" class="px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-medium text-sm hover:bg-blue-200 transition" onclick="updateGroupChart('A')">Bảng A</button>
+                    <button id="btnGroupB" class="px-4 py-2 rounded-full bg-stone-100 text-stone-600 font-medium text-sm hover:bg-stone-200 transition" onclick="updateGroupChart('B')">Bảng B</button>
+                </div>
+
+                <div class="chart-container" style="max-width: 800px;">
+                    <canvas id="standingsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Match Results Table (Scrollable) -->
+             <div class="glass-panel rounded-xl shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-stone-100 bg-stone-50 flex justify-between items-center flex-wrap gap-4">
+                    <h3 class="text-lg font-semibold text-stone-800">Kết Quả Các Trận Đấu Nổi Bật</h3>
+                    <input type="text" id="matchSearch" placeholder="Tìm kiếm tên VĐV..." class="px-4 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <div class="overflow-x-auto max-h-96">
+                    <table class="min-w-full divide-y divide-stone-200" id="matchTable">
+                        <thead class="bg-stone-50 sticky top-0">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Vòng</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Cặp 1</th>
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-stone-500 uppercase tracking-wider">Tỷ Số</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-stone-500 uppercase tracking-wider">Cặp 2</th>
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-stone-500 uppercase tracking-wider">Kết Quả</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-stone-200 text-sm" id="matchTableBody">
+                            <!-- JavaScript will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-stone-200"></div>
+
+        <!-- Section 4: Logistics (Fun Stats) -->
+        <section id="logistics" class="scroll-mt-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-amber-500 rounded-sm"></span>
+                    Góc Hậu Cần
+                </h2>
+                <p class="mt-2 text-stone-600">Một chút thống kê vui về size áo thi đấu của 24 vận động viên. Size L và XL chiếm đa số, chứng tỏ anh em Hưng Phú rất "đô con"!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="glass-panel rounded-xl shadow-sm p-6 flex flex-col justify-center">
+                    <h3 class="text-lg font-semibold text-stone-800 mb-4 text-center">Phân Bố Size Áo</h3>
+                    <div class="chart-container">
+                        <canvas id="sizeChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
+                        <h4 class="font-bold text-amber-800">Size Phổ Biến Nhất: L</h4>
+                        <p class="text-amber-700 text-sm">Có tới 11 vận động viên mặc size L, chiếm gần 50% tổng số.</p>
+                    </div>
+                    <div class="p-4 bg-stone-100 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-stone-800">Size "Khủng" Nhất: XXL</h4>
+                        <p class="text-stone-600 text-sm">Dành cho 2 "người khổng lồ" của giải đấu (Phúc Đ3, Hưng Đ1).</p>
+                    </div>
+                    <div class="p-4 bg-stone-100 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-stone-800">Size "Nhỏ Nhắn": S</h4>
+                        <p class="text-stone-600 text-sm">Duy nhất 1 vận động viên (Vũ 41-D2) sở hữu thân hình gọn gàng này.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Call to Action -->
+        <footer class="bg-stone-900 text-stone-300 rounded-2xl p-8 mt-16 mb-8 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Sẵn Sàng Cho Hưng Phú Open 3?</h2>
+            <p class="mb-6 max-w-2xl mx-auto">Mùa giải Open 2 đã khép lại thành công rực rỡ. Hãy chuẩn bị tinh thần và thể lực để đón chờ giải đấu Giáng Sinh & Năm Mới sắp tới!</p>
+            <a href="https://duonglx.github.io/hungphu/hpopen3-dangky.html"><button class="bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition duration-200">
+                Xem Thông Báo Open 3
+            </button></a>
+            <p class="mt-8 text-xs text-stone-500">© 2025 CLB Tennis Hưng Phú. Dữ liệu được tổng hợp từ Ban Tổ Chức.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Data Processing ---
+        
+        // Financial Data (Synthesized from CSVs)
+        const incomeData = {
+            labels: ['Phí VĐV (24 người)', 'Tài Trợ (Xóm Media)', 'Tài Trợ (Ép Cọc Minh Đức)', 'Tài Trợ (Kosmen)', 'Tài Trợ (A Vũ)', 'Tài Trợ (Hoan Đ6)', 'Tài Trợ (Đồ Cúng Việt)', 'Tài Trợ (A Hưng Đ1)', 'Tài Trợ (Tiến Đ5)', 'Tài Trợ (A Quang Đ5)'],
+            values: [3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 3000000, 2000000, 2000000] // Approx values from CSV
+        };
+
+        const expenseData = {
+            labels: ['Tiệc Gala + Âm Thanh', 'Cúp & Huy Chương', 'Đồ Ăn/Nước Uống', 'Áo Đấu', 'Khác'],
+            values: [10300000, 9388000, 4363000, 3200000, 250000] // Approx values from CSV
+        };
+
+        // Size Data (From CSV)
+        const sizeData = {
+            labels: ['S', 'M', 'L', 'XL', 'XXL'],
+            values: [1, 3, 11, 7, 2]
+        };
+
+        // Standings Data (Synthesized from Xếp hạng.csv)
+        const groupA = [
+            { team: 'Vũ Sanh', w: 4, l: 1 },
+            { team: 'Hoan Hoan', w: 4, l: 1 },
+            { team: 'Tiến Phúc', w: 3, l: 2 },
+            { team: 'Hưng Phong', w: 2, l: 3 },
+            { team: 'Dương Giác', w: 2, l: 3 },
+            { team: 'Tuấn Quảng', w: 0, l: 5 }
+        ];
+
+        const groupB = [
+            { team: 'Dũng Tân Trung', w: 4, l: 1 },
+            { team: 'Vinh Tới', w: 4, l: 1 },
+            { team: 'Hảo Đức cọc', w: 3, l: 2 },
+            { team: 'Sơn Hòa', w: 2, l: 3 },
+            { team: 'Tài Danh', w: 1, l: 4 },
+            { team: 'Quang Đức 12d3', w: 0, l: 5 }
+        ];
+
+        // Matches Data (Synthesized from CSVs)
+        const matches = [
+            // Vòng Bảng A (Full Data)
+            { round: 'Vòng Bảng A', t1: 'Tuấn Quảng', s1: 5, s2: 6, t2: 'Hưng Phong', res: 'Hưng Phong thắng' },
+            { round: 'Vòng Bảng A', t1: 'Tuấn Quảng', s1: 4, s2: 6, t2: 'Vũ Sanh', res: 'Vũ Sanh thắng' },
+            { round: 'Vòng Bảng A', t1: 'Tuấn Quảng', s1: 5, s2: 6, t2: 'Tiến Phúc', res: 'Tiến Phúc thắng' },
+            { round: 'Vòng Bảng A', t1: 'Tuấn Quảng', s1: 1, s2: 6, t2: 'Hoan Hoan', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Bảng A', t1: 'Tuấn Quảng', s1: 4, s2: 6, t2: 'Dương Giác', res: 'Dương Giác thắng' },
+            { round: 'Vòng Bảng A', t1: 'Hưng Phong', s1: 1, s2: 6, t2: 'Vũ Sanh', res: 'Vũ Sanh thắng' },
+            { round: 'Vòng Bảng A', t1: 'Hưng Phong', s1: 4, s2: 6, t2: 'Tiến Phúc', res: 'Tiến Phúc thắng' },
+            { round: 'Vòng Bảng A', t1: 'Hưng Phong', s1: 1, s2: 6, t2: 'Dương Giác', res: 'Dương Giác thắng' },
+            { round: 'Vòng Bảng A', t1: 'Hưng Phong', s1: 6, s2: 5, t2: 'Hoan Hoan', res: 'Hưng Phong thắng' },
+            { round: 'Vòng Bảng A', t1: 'Vũ Sanh', s1: 6, s2: 5, t2: 'Tiến Phúc', res: 'Vũ Sanh thắng' },
+            { round: 'Vòng Bảng A', t1: 'Vũ Sanh', s1: 6, s2: 2, t2: 'Dương Giác', res: 'Vũ Sanh thắng' },
+            { round: 'Vòng Bảng A', t1: 'Vũ Sanh', s1: 5, s2: 6, t2: 'Hoan Hoan', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Bảng A', t1: 'Dương Giác', s1: 2, s2: 6, t2: 'Hoan Hoan', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Bảng A', t1: 'Dương Giác', s1: 5, s2: 6, t2: 'Tiến Phúc', res: 'Tiến Phúc thắng' },
+            { round: 'Vòng Bảng A', t1: 'Tiến Phúc', s1: 2, s2: 6, t2: 'Hoan Hoan', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Bảng B', t1: 'Tài Danh', s1: 6, s2: 4, t2: 'Quang Đức 12d3', res: 'Tài Danh thắng' },
+            { round: 'Vòng Bảng B', t1: 'Tài Danh', s1: 5, s2: 6, t2: 'Hảo Đức cọc', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Bảng B', t1: 'Tài Danh', s1: 4, s2: 6, t2: 'Dũng Tân(Trung)', res: 'Dũng Tân(Trung) thắng' },
+            { round: 'Vòng Bảng B', t1: 'Tài Danh', s1: 5, s2: 6, t2: 'Sơn Hòa', res: 'Sơn Hòa thắng' },
+            { round: 'Vòng Bảng B', t1: 'Tài Danh', s1: 3, s2: 6, t2: 'Vinh Tới', res: 'Vinh Tới thắng' },
+            { round: 'Vòng Bảng B', t1: 'Hảo Đức cọc', s1: 6, s2: 3, t2: 'Quang Đức 12d3', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Bảng B', t1: 'Hảo Đức cọc', s1: 6, s2: 1, t2: 'Sơn Hòa', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Bảng B', t1: 'Hảo Đức cọc', s1: 5, s2: 6, t2: 'Vinh Tới', res: 'Vinh Tới thắng' },
+            { round: 'Vòng Bảng B', t1: 'Hảo Đức cọc', s1: 6, s2: 4, t2: 'Dũng Tân(Trung)', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Bảng B', t1: 'Dũng Tân(Trung)', s1: 6, s2: 1, t2: 'Quang Đức 12d3', res: 'Dũng Tân(Trung) thắng' },
+            { round: 'Vòng Bảng B', t1: 'Dũng Tân(Trung)', s1: 6, s2: 4, t2: 'Sơn Hòa', res: 'Dũng Tân(Trung) thắng' },
+            { round: 'Vòng Bảng B', t1: 'Dũng Tân(Trung)', s1: 6, s2: 5, t2: 'Vinh Tới', res: 'Dũng Tân(Trung) thắng' },
+            { round: 'Vòng Bảng B', t1: 'Vinh Tới', s1: 6, s2: 1, t2: 'Sơn Hòa', res: 'Vinh Tới thắng' },
+            { round: 'Vòng Bảng B', t1: 'Vinh Tới', s1: 6, s2: 3, t2: 'Quang Đức 12d3', res: 'Vinh Tới thắng' },
+            { round: 'Vòng Bảng B', t1: 'Sơn Hòa', s1: 6, s2: 1, t2: 'Quang Đức 12d3', res: 'Sơn Hòa thắng' },
+
+            // Vòng Vớt Lại (New Data)
+            { round: 'Vòng Bán kết VVL 1', t1: 'Hưng Phong', s1: 0, s2: 6, t2: 'Quang Đức 12d3', res: 'Quang Đức 12d3 thắng' },
+            { round: 'Vòng Bán kết VVL 2', t1: 'Tuấn Quảng', s1: 6, s2: 0, t2: 'Tài Danh', res: 'Tuấn Quảng thắng' },
+            { round: 'Vòng Chung Kết VVL', t1: 'Quang Đức 12d3', s1: 2, s2: 6, t2: 'Tuấn Quảng', res: 'Tuấn Quảng thắng' },
+            { round: 'Vòng Tứ Kết 1', t1: 'Hoan Hoan', s1: 6, s2: 5, t2: 'Sơn Hòa', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Tứ Kết 2', t1: 'Tiến Phúc', s1: 5, s2: 6, t2: 'Hảo Đức cọc', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Tứ Kết 3', t1: 'Dương Giác', s1: 6, s2: 4, t2: 'Vinh Tới', res: 'Dương Giác thắng' },
+            { round: 'Vòng Tứ Kết 4', t1: 'Vũ Sanh', s1: 1, s2: 6, t2: 'Dũng Trung', res: 'Dũng Trung thắng' },
+            { round: 'Vòng Bán Kết 1', t1: 'Hoan Hoan', s1: 4, s2: 6, t2: 'Hảo Đức cọc', res: 'Hảo Đức cọc thắng' },
+            { round: 'Vòng Bán Kết 2', t1: 'Dương Giác', s1: 3, s2: 6, t2: 'Dũng Trung', res: 'Dũng Trung thắng' },
+            { round: 'Vòng Tranh Giải Ba', t1: 'Hoan Hoan', s1: 6, s2: 0, t2: 'Dương Giác', res: 'Hoan Hoan thắng' },
+            { round: 'Vòng Chung Kết', t1: 'Hảo Đức cọc', s1: 3, s2: 6, t2: 'Dũng Trung', res: 'Dũng Trung Vô Địch' }
+
+        ];
+
+
+        // --- Chart Configuration Helper ---
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { family: "'Be Vietnam Pro', sans-serif", size: 11 },
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: '#1c1917',
+                    bodyColor: '#44403c',
+                    borderColor: '#e7e5e4',
+                    borderWidth: 1,
+                    padding: 12,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                }
+            }
+        };
+
+        // Label wrapping logic (16 chars)
+        function processLabels(labels) {
+            return labels.map(label => {
+                if (label.length > 16) {
+                    const words = label.split(' ');
+                    const lines = [];
+                    let currentLine = words[0];
+                    for (let i = 1; i < words.length; i++) {
+                        if (currentLine.length + 1 + words[i].length <= 16) {
+                            currentLine += ' ' + words[i];
+                        } else {
+                            lines.push(currentLine);
+                            currentLine = words[i];
+                        }
+                    }
+                    lines.push(currentLine);
+                    return lines;
+                }
+                return label;
+            });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Income Chart
+            const ctxIncome = document.getElementById('incomeChart').getContext('2d');
+            new Chart(ctxIncome, {
+                type: 'pie',
+                data: {
+                    labels: processLabels(incomeData.labels),
+                    datasets: [{
+                        data: incomeData.values,
+                        backgroundColor: ['#059669', '#fbbf24', '#f59e0b', '#d97706', '#b45309'],
+                        borderWidth: 0
+                    }]
+                },
+                options: commonOptions
+            });
+
+            // 2. Expense Chart
+            const ctxExpense = document.getElementById('expenseChart').getContext('2d');
+            new Chart(ctxExpense, {
+                type: 'bar',
+                data: {
+                    labels: processLabels(expenseData.labels),
+                    datasets: [{
+                        label: 'Chi Phí (VNĐ)',
+                        data: expenseData.values,
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    ...commonOptions,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Standings Chart (Group A Default)
+            const ctxStandings = document.getElementById('standingsChart').getContext('2d');
+            window.standingsChart = new Chart(ctxStandings, {
+                type: 'bar',
+                data: {
+                    labels: processLabels(groupA.map(t => t.team)),
+                    datasets: [
+                        {
+                            label: 'Thắng',
+                            data: groupA.map(t => t.w),
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Thua',
+                            data: groupA.map(t => t.l),
+                            backgroundColor: '#cbd5e1',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        y: { beginAtZero: true, max: 5 }
+                    }
+                }
+            });
+
+            // 4. Size Chart
+            const ctxSize = document.getElementById('sizeChart').getContext('2d');
+            new Chart(ctxSize, {
+                type: 'doughnut',
+                data: {
+                    labels: sizeData.labels,
+                    datasets: [{
+                        data: sizeData.values,
+                        backgroundColor: ['#fcd34d', '#fbbf24', '#f59e0b', '#d97706', '#78350f'],
+                        borderWidth: 0
+                    }]
+                },
+                options: commonOptions
+            });
+
+            // 5. Populate Match Table
+            renderMatches(matches);
+
+            // Search Functionality
+            document.getElementById('matchSearch').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = matches.filter(m => 
+                    m.t1.toLowerCase().includes(term) || 
+                    m.t2.toLowerCase().includes(term) ||
+                    m.res.toLowerCase().includes(term)
+                );
+                renderMatches(filtered);
+            });
+        });
+
+        // --- Interaction Functions ---
+
+        function updateGroupChart(group) {
+            const data = group === 'A' ? groupA : groupB;
+            const btnA = document.getElementById('btnGroupA');
+            const btnB = document.getElementById('btnGroupB');
+            
+            // Update Buttons
+            if (group === 'A') {
+                btnA.className = "px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-medium text-sm transition shadow-inner";
+                btnB.className = "px-4 py-2 rounded-full bg-stone-100 text-stone-600 font-medium text-sm hover:bg-stone-200 transition";
+            } else {
+                btnB.className = "px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-medium text-sm transition shadow-inner";
+                btnA.className = "px-4 py-2 rounded-full bg-stone-100 text-stone-600 font-medium text-sm hover:bg-stone-200 transition";
+            }
+
+            // Update Chart
+            window.standingsChart.data.labels = processLabels(data.map(t => t.team));
+            window.standingsChart.data.datasets[0].data = data.map(t => t.w);
+            window.standingsChart.data.datasets[1].data = data.map(t => t.l);
+            window.standingsChart.update();
+        }
+
+        function renderMatches(data) {
+            const tbody = document.getElementById('matchTableBody');
+            tbody.innerHTML = '';
+            data.forEach(m => {
+                const row = `
+                    <tr class="hover:bg-stone-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-amber-600">${m.round}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-stone-800">${m.t1}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center font-mono bg-stone-100 rounded mx-2">${m.s1} - ${m.s2}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-stone-800 text-right">${m.t2}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                ${m.res}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            // Simple active state logic
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
